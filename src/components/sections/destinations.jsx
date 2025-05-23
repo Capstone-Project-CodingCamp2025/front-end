@@ -1,0 +1,56 @@
+  const destinations = [
+  //  {
+  //   id: 1,
+  //   name: 'Danau Toba',
+  //   image: 'https://images.unsplash.com/photo-1582972236019-ea9e36d7f32e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  //   rating: 4.8,
+  //   location: 'Sumatera Utara',
+  //   price: 'Rp 1.2jt',
+  // },
+  {
+    id: 2,
+    name: 'Pulau Samosir',
+    image: 'https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    rating: 4.7,
+    location: 'Sumatera Utara',
+    price: 'Rp 1.5jt',
+    description: 'Pulau di tengah Danau Toba yang terkenal dengan keindahan alam dan budaya Batak.',
+  },
+  {
+    id: 3,
+    name: 'Bukit Lawang',
+    image: 'https://images.unsplash.com/photo-1533856493584-0c6ca8ca9ce3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    rating: 4.6,
+    location: 'Sumatera Utara',
+    price: 'Rp 800rb',
+    description: 'Destinasi ekowisata populer untuk melihat orangutan Sumatera di habitat aslinya.',
+  },
+  // {
+  //   id: 4,
+  //   name: 'Air Terjun Sipiso-piso',
+  //   image: 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  //   rating: 4.9,
+  //   location: 'Sumatera Utara',
+  //   price: 'Rp 600rb',
+  // },
+  {
+    id: 5,
+    name: 'Jam Gadang',
+    image: 'https://images.unsplash.com/photo-1638199406429-f0c6cf5de006?q=80&w=1527&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    rating: 4.5,
+    location: 'Bukittinggi, Sumatera Barat',
+    price: 'Rp 500rb',
+    description: 'Ikon kota Bukittinggi yang menjadi landmark terkenal di Sumatera Barat.',
+  },
+  {
+    id: 6,
+    name: 'Lembah Harau',
+    image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    rating: 4.7,
+    location: 'Sumatera Barat',
+    price: 'Rp 750rb',
+    description: 'Lembah indah dengan tebing-tebing tinggi dan air terjun yang mempesona.',
+  },
+];
+
+export default destinations;

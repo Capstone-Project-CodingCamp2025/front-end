@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Hero() {
   return (
     <section className="relative h-[90vh] min-h-[600px] overflow-hidden">
@@ -32,12 +34,13 @@ export default function Hero() {
           
           {/* Tombol CTA */}
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
-            <button className="flex items-center justify-center gap-2 px-8 py-3 font-bold text-white transition-all duration-300 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:shadow-lg hover:scale-105">
+            <Link to={"/destination"} onClick={() =>scrollTo(0,0)}
+            className="flex items-center justify-center gap-2 px-8 py-3 font-bold text-white transition-all duration-300 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:shadow-lg hover:scale-105">
               Jelajahi Sekarang
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
               </svg>
-            </button>
+            </Link>
           </div>
         </div>
       </div>

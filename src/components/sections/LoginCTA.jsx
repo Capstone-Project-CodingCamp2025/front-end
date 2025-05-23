@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function LoginCTA() {
   return (
     <section className="py-20 bg-gray-50">
@@ -16,10 +18,12 @@ export default function LoginCTA() {
           </p>
 
           <div className="relative z-10 flex flex-col justify-center gap-4 sm:flex-row">
-            <button className="px-8 py-3 font-bold text-blue-600 transition-all duration-300 bg-white rounded-full hover:bg-gray-100 hover:scale-105">
+            <Link to="/register" onClick={() =>scrollTo(0,0)}
+            className="px-8 py-3 font-bold text-blue-600 transition-all duration-300 bg-white rounded-full hover:bg-gray-100 hover:scale-105">
               Daftar Gratis
-            </button>
-            <button className="flex items-center justify-center gap-2 px-8 py-3 font-medium text-white transition-colors bg-transparent border-2 border-white rounded-full hover:bg-white/10">
+            </Link>
+            <Link to={"/login"} onClick={() =>scrollTo(0,0)}
+             className="flex items-center justify-center gap-2 px-8 py-3 font-medium text-white transition-colors bg-transparent border-2 border-white rounded-full hover:bg-white/10">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -34,7 +38,7 @@ export default function LoginCTA() {
                 />
               </svg>
               Masuk Sekarang
-            </button>
+            </Link>
           </div>
         </div>
       </div>

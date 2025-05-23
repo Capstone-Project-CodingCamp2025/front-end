@@ -8,8 +8,10 @@ export default function Navbar() {
     <nav className="fixed z-50 w-full shadow-lg bg-gradient-to-r from-blue-500 to-blue-600">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
+
           {/* Logo */}
-          <div className="flex items-center flex-shrink-0">
+        <Link to="/">
+          <div className="flex items-center flex-shrink-0 ">
             <svg
               className="w-8 h-8 text-white"
               fill="currentColor"
@@ -19,6 +21,7 @@ export default function Navbar() {
             </svg>
             <span className="ml-2 text-xl font-bold text-white">SIRESITA</span>
           </div>
+        </Link>
 
           {/* Desktop Menu */}
           <div className="items-center hidden space-x-4 md:flex">
@@ -29,16 +32,16 @@ export default function Navbar() {
               Beranda
             </Link>
             <Link
+              to="/destination"
+              className="px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-blue-400"
+            >
+              Destination
+            </Link>
+            <Link
               to="/about"
               className="px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-blue-400"
             >
-              Tentang
-            </Link>
-            <Link
-              to="/contact"
-              className="px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-blue-400"
-            >
-              Kontak
+              About
             </Link>
           </div>
 
@@ -115,18 +118,18 @@ export default function Navbar() {
             Beranda
           </Link>
           <Link
+            to="/destination"
+            className="block px-3 py-2 text-base font-medium text-white rounded-md hover:bg-blue-500"
+            onClick={() => setIsOpen(false)}
+          >
+            Destination
+          </Link>
+          <Link
             to="/about"
             className="block px-3 py-2 text-base font-medium text-white rounded-md hover:bg-blue-500"
             onClick={() => setIsOpen(false)}
           >
-            Tentang
-          </Link>
-          <Link
-            to="/contact"
-            className="block px-3 py-2 text-base font-medium text-white rounded-md hover:bg-blue-500"
-            onClick={() => setIsOpen(false)}
-          >
-            Kontak
+            About
           </Link>
           <Link
             to="/register"
