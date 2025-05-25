@@ -23,7 +23,7 @@
     rating: 4.6,
     location: 'Sumatera Utara',
     price: 'Rp 800rb',
-    description: 'Destinasi ekowisata populer untuk melihat orangutan Sumatera di habitat aslinya.',
+    description: 'Salah satu destinasi ekowisata paling populer di Sumatera Utara, tempat ini terkenal sebagai lokasi terbaik untuk menyaksikan orangutan Sumatera di habitat aslinya. Dikelilingi oleh hutan tropis yang asri dan sungai yang jernih, kawasan ini menawarkan keindahan alam yang memukau dan udara yang sejuk. Setiap tahunnya, ribuan wisatawan dari berbagai negara datang untuk menikmati pengalaman alam yang autentik. Beragam aktivitas seru dapat dilakukan di sini, mulai dari trekking di tengah hutan, berkemah di alam terbuka, hingga menyusuri sungai yang menenangkan. Tempat ini adalah surga tersembunyi bagi para pecinta alam dan petualangan.',
   },
   // {
   //   id: 4,
