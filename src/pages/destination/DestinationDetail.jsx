@@ -1,6 +1,7 @@
-import { useParams, useNavigate } from "react-router-dom";
+/* eslint-disable no-unused-vars */
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import destinations from "../components/sections/destinations";
+import destinations from "../../components/sections/destinations";
 
 const Destinationdetail = () => {
   const { id } = useParams();
@@ -75,7 +76,7 @@ const Destinationdetail = () => {
           {/* Left half of star */}
           <button
             type="button"
-            className="absolute left-0 w-1/2 h-full z-10 focus:outline-none"
+            className="absolute left-0 z-10 w-1/2 h-full focus:outline-none"
             onMouseEnter={() => onHover(i - 0.5)}
             onMouseLeave={onLeave}
             onClick={() => onRatingChange(i - 0.5)}
@@ -83,14 +84,14 @@ const Destinationdetail = () => {
           {/* Right half of star */}
           <button
             type="button"
-            className="absolute right-0 w-1/2 h-full z-10 focus:outline-none"
+            className="absolute right-0 z-10 w-1/2 h-full focus:outline-none"
             onMouseEnter={() => onHover(i)}
             onMouseLeave={onLeave}
             onClick={() => onRatingChange(i)}
           />
           
           <svg
-            className="w-8 h-8 transition-colors cursor-pointer relative"
+            className="relative w-8 h-8 transition-colors cursor-pointer"
             viewBox="0 0 24 24"
           >
             {/* Background star (empty) */}
@@ -142,7 +143,7 @@ const Destinationdetail = () => {
         
         {/* Manual input for precise ratings */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-600">Atau masukkan rating manual:</label>
+          <Link className="text-sm text-gray-600">Atau masukkan rating manual:</Link>
           <input
             type="number"
             min="0"
@@ -155,7 +156,7 @@ const Destinationdetail = () => {
                 onRatingChange(val);
               }
             }}
-            className="w-20 px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-20 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             placeholder="4.6"
           />
           <span className="text-sm text-gray-500">(0.0 - 5.0)</span>
@@ -166,12 +167,12 @@ const Destinationdetail = () => {
 
   return (
     <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-lg mt-14 md:mt-24 p-0 md:p-8 min-h-[600px]">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 md:items-start">
+      <div className="grid grid-cols-1 gap-0 md:grid-cols-2 md:gap-8 md:items-start">
         <div className="relative w-full">
           {/* Tombol kembali */}
           <button
             onClick={() => navigate(-1)}
-            className="absolute top-3 left-3 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow transition z-10"
+            className="absolute z-10 p-2 transition bg-white rounded-full shadow top-3 left-3 bg-opacity-80 hover:bg-opacity-100"
             title="Kembali">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -180,7 +181,7 @@ const Destinationdetail = () => {
           <img
             src={destination.image}
             alt={destination.name}
-            className="w-full object-cover rounded-t-xl md:rounded-l-xl md:rounded-tr-none"
+            className="object-cover w-full rounded-t-xl md:rounded-l-xl md:rounded-tr-none"
             style={{ height: window.innerWidth >= 768 ? imageHeight : '256px' }}
           />
         </div>
@@ -189,10 +190,10 @@ const Destinationdetail = () => {
         <div ref={contentRef} className="flex flex-col justify-start p-6 md:p-0">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <h1 className="text-3xl md:text-4xl font-bold mb-0 flex items-center gap-3">
+              <h1 className="flex items-center gap-3 mb-0 text-3xl font-bold md:text-4xl">
                 {destination.name}
                 {/* Rating */}
-                <span className="inline-flex items-center bg-yellow-100 text-yellow-700 px-4 py-1 rounded-full font-semibold text-base">
+                <span className="inline-flex items-center px-4 py-1 text-base font-semibold text-yellow-700 bg-yellow-100 rounded-full">
                   <svg className="w-5 h-5 mr-2 text-yellow-400" 
                     fill="currentColor" 
                     viewBox="0 0 20 20">
@@ -230,7 +231,7 @@ const Destinationdetail = () => {
               <span className="font-semibold">Lokasi:</span> {destination.location}
             </p>
             <p className="mb-4 text-base md:text-lg">{destination.description || 'Deskripsi destinasi belum tersedia.'}</p>
-            <p className="font-bold text-blue-700 text-lg md:text-xl">{destination.price}</p>
+            <p className="text-lg font-bold text-blue-700 md:text-xl">{destination.price}</p>
           </div>
         </div>
       </div>
@@ -238,14 +239,14 @@ const Destinationdetail = () => {
       <hr className="my-8 border-t-2 border-gray-200" />
 
       {/* Ulasan */}
-      <div className="px-6 md:px-0 mt-8 md:mt-12 pb-8">
-        <h2 className="text-2xl font-bold mb-4">Ulasan Pengunjung</h2>
+      <div className="px-6 pb-8 mt-8 md:px-0 md:mt-12">
+        <h2 className="mb-4 text-2xl font-bold">Ulasan Pengunjung</h2>
         <div className="space-y-4">
 
-          <div className="bg-gray-100 rounded-lg p-4">
+          <div className="p-4 bg-gray-100 rounded-lg">
             <div className="flex items-center gap-2 mb-4">
               <span className='font-semibold'>Tia</span>
-              <span className="inline-flex items-center bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-semibold text-base">
+              <span className="inline-flex items-center px-3 py-1 text-base font-semibold text-yellow-700 bg-yellow-100 rounded-full">
               <svg className="w-5 h-5 mr-1 text-yellow-400" 
                 fill="currentColor" 
                 viewBox="0 0 20 20">
@@ -256,10 +257,10 @@ const Destinationdetail = () => {
             </div>
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam rem magnam quia ducimus dolore delectus ad consectetur, perspiciatis facere debitis reprehenderit quae doloribus dignissimos, a tempore pariatur esse in ratione!</p>
           </div>
-          <div className="bg-gray-100 rounded-lg p-4">
+          <div className="p-4 bg-gray-100 rounded-lg">
             <div className="flex items-center gap-2 mb-4">
               <span className='font-semibold'>Tia</span>
-              <span className="inline-flex items-center bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-semibold text-base">
+              <span className="inline-flex items-center px-3 py-1 text-base font-semibold text-yellow-700 bg-yellow-100 rounded-full">
               <svg className="w-5 h-5 mr-1 text-yellow-400" 
                 fill="currentColor" 
                 viewBox="0 0 20 20">
@@ -272,8 +273,8 @@ const Destinationdetail = () => {
           </div>
 
             {/* Form Tambah Ulasan */}
-          <div className="bg-white rounded-lg shadow mt-8 p-4 md:p-6">
-            <h3 className="text-lg font-semibold mb-4">Tulis Ulasan Anda</h3>
+          <div className="p-4 mt-8 bg-white rounded-lg shadow md:p-6">
+            <h3 className="mb-4 text-lg font-semibold">Tulis Ulasan Anda</h3>
             <form onSubmit={handleSubmitReview}>
               <div className="mb-4">
                 <input
@@ -281,15 +282,15 @@ const Destinationdetail = () => {
                   placeholder="Nama Anda"
                   value={reviewForm.name}
                   onChange={(e) => setReviewForm({...reviewForm, name: e.target.value})}
-                  className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                   required
                 />
               </div>
               
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <Link className="block mb-2 text-sm font-medium text-gray-700">
                   Rating Anda
-                </label>
+                </Link>
                 <StarRating
                   rating={reviewForm.rating}
                   onRatingChange={(rating) => setReviewForm({...reviewForm, rating})}
@@ -304,7 +305,7 @@ const Destinationdetail = () => {
                   placeholder="Tulis ulasan di sini..."
                   value={reviewForm.review}
                   onChange={(e) => setReviewForm({...reviewForm, review: e.target.value})}
-                  className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                   rows={3}
                   required
                 />
@@ -312,7 +313,7 @@ const Destinationdetail = () => {
               
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-semibold transition-colors"
+                className="px-6 py-2 font-semibold text-white transition-colors bg-blue-600 rounded hover:bg-blue-700"
               > 
                 Kirim Ulasan
               </button>

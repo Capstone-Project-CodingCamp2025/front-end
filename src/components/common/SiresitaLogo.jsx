@@ -1,0 +1,13 @@
+const SiresitaLogo = ({ className = "w-16 h-16 text-white", ariaLabel = "SIRESITA Logo" }) => (
+  <svg
+    className={className}
+    fill="currentColor"
+    viewBox="0 0 24 24"
+    aria-label={ariaLabel}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M12 2L4 8v12h16V8L12 2zm0 2.5l6 4.5v9H6v-9l6-4.5z" />
+  </svg>
+);
+
+export default SiresitaLogo;

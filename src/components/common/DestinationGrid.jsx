@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import destinations from "../sections/destinations";
 
+
 export default function DestinationGrid() {
   const navigate = useNavigate();
 
@@ -55,7 +56,7 @@ export default function DestinationGrid() {
         <div className="p-6 text-gray-900">
           <div className="flex items-start justify-between mb-2">
             <h3 className="text-xl font-bold">{destination.name}</h3>
-            <span className="flex items-center px-2 py-1 text-sm rounded-full bg-yellow-100 text-yellow-700">
+            <span className="flex items-center px-2 py-1 text-sm text-yellow-700 bg-yellow-100 rounded-full">
             ⭐ {destination.rating}
             </span>
           </div>

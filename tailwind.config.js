@@ -1,7 +1,6 @@
 // tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 
-
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 
@@ -73,18 +72,30 @@ export default {
         'button': '0 4px 14px rgba(0, 118, 255, 0.39)',
       },
       animation: {
-        'gradient-shift': 'gradient 8s ease infinite',
-        'float': 'float 6s ease-in-out infinite',
+        'gradient-shift': 'gradient 8s ease infinite', // Animasi Anda yang sudah ada
+        'float': 'float 6s ease-in-out infinite',   // Animasi Anda yang sudah ada
+        // PENAMBAHAN ANIMASI BARU
+        'fade-in-down': 'fadeInDown 0.8s ease-out forwards',
+        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
       },
       keyframes: {
-        gradient: {
+        gradient: { // Keyframes Anda yang sudah ada
           '0%, 100%': { 'background-position': '0% 50%' },
           '50%': { 'background-position': '100% 50%' },
         },
-        float: {
+        float: { // Keyframes Anda yang sudah ada
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
-        }
+        },
+        // PENAMBAHAN KEYFRAMES BARU
+        fadeInDown: {
+          '0%': { opacity: '0', transform: 'translateY(-20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
       }
     },
   },
