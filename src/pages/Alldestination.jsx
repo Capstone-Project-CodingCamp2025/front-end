@@ -1,98 +1,72 @@
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function DestinationGrid() {
+const Alldestination = () => {
   const navigate = useNavigate();
   const [destinations, setDestinations] = useState([]);
 
   useEffect(() => {
-    const fetchRecommendations = async () => {
+    const fetchPopular = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/recommendations"); 
-        setDestinations(response.data.recos); // ambil array recos dari object response
-        console.log("Recommendations API response:", response.data.recos);
+        const response = await axios.get(
+          "http://localhost:5000/recommendations/popular",
+          { params: { limit: 12 } }
+        );
+        setDestinations(response.data.recos);
       } catch (error) {
-        console.error("Failed to fetch recommendations:", error);
+        console.error("Failed to fetch popular destinations:", error);
       }
     };
-
-    fetchRecommendations();
+    fetchPopular();
   }, []);
 
   return (
-    <section className="py-20 bg-white">
-      <div className="px-6 mx-auto max-w-7xl">
-        <div className="flex items-center justify-between mb-12">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900">
-              Rekomendasi Untuk Anda
-            </h2>
-            <p className="text-gray-600">Destinasi populer pilihan traveler</p>
-          </div>
-
-          {/* tombol lihat semua */}
-          <button
+    <div className="pt-28 md:pt-35 px-4 md:px-16 lg:px-24">
+      <div className="mb-8">
+        <h1 className="font-display text-3xl md:text-4xl mb-2">
+          Destinasi Populer
+        </h1>
+        <p className="text-sm md:text-base text-gray-500/90 mb-2 max-w-2xl">
+          Tempat wisata dengan rating tertinggi dan ulasan terbanyak
+        </p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {destinations.map((d) => (
+          <div
+            key={d.id}
+            className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col cursor-pointer transition-transform duration-300 hover:scale-105"
             onClick={() => {
-              navigate("/destination");
+              navigate(`/destination/${d.id}`);
               scrollTo(0, 0);
             }}
-            className="flex items-center gap-2 font-medium text-blue-600 hover:text-blue-800"
           >
-            Lihat Semua
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 5l7 7-7 7"
+            <div className="h-48 md:h-56 w-full overflow-hidden">
+              <img
+                src={d.image}
+                alt={d.name}
+                className="object-cover w-full h-full"
               />
-            </svg>
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {destinations.map((destination) => (
-            <div
-              key={destination.id}
-              className="relative overflow-hidden transition-shadow duration-300 shadow-lg group rounded-2xl hover:shadow-xl cursor-pointer"
-              onClick={() => {
-                navigate(`/destination/${destination.id}`);
-                scrollTo(0, 0);
-              }}
-            >
-              <div className="h-64 overflow-hidden">
-                <img
-                  src={destination.image}
-                  alt={destination.name}
-                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-
-              {/* Deskripsi */}
-              <div className="p-6 text-gray-900">
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-xl font-bold">{destination.name}</h3>
-                  <span className="flex items-center px-2 py-1 text-sm rounded-full bg-yellow-100 text-yellow-700">
-                    ⭐ {destination.rating}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">{destination.location}</p>
-                    <p className="font-bold">{destination.price}</p>
-                  </div>
-                </div>
-              </div>
             </div>
-          ))}
-        </div>
+            <div className="p-5 flex flex-col flex-1">
+              <div className="flex items-center justify-between mb-2">
+                <p className="font-bold text-lg">{d.name}</p>
+                <span className="flex items-center px-2 py-1 text-sm rounded-full bg-yellow-100 text-yellow-700 font-semibold">
+                  <span className="mr-1">⭐</span>
+                  {d.rating}
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 mb-1">{d.location}</p>
+              <p className="text-xs text-gray-500 mb-2">
+                {d.reviewCount} ulasan
+              </p>
+              <p className="font-bold text-base text-gray-900">{d.price}</p>
+            </div>
+          </div>
+        ))}
       </div>
-    </section>
+    </div>
   );
-}
+};
+
+export default Alldestination;
