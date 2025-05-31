@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+
 export default function DestinationGrid() {
   const navigate = useNavigate();
   const [destinations, setDestinations] = useState([]);
@@ -9,7 +10,7 @@ export default function DestinationGrid() {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/destinations"); 
+        const response = await axios.get("http://localhost:5000/recommendations/popular"); 
         setDestinations(response.data.recos); // ambil array recos dari object response
         console.log("Recommendations API response:", response.data.recos);
       } catch (error) {
@@ -74,6 +75,7 @@ export default function DestinationGrid() {
                 />
               </div>
 
+<<<<<<< HEAD:src/components/sections/DestinationGrid.jsx
               {/* Deskripsi */}
               <div className="p-6 text-gray-900">
                 <div className="flex items-start justify-between mb-2">
@@ -90,6 +92,24 @@ export default function DestinationGrid() {
                 </div>
               </div>
             </div>
+=======
+        {/* Deskripsi */}
+        <div className="p-6 text-gray-900">
+          <div className="flex items-start justify-between mb-2">
+            <h3 className="text-xl font-bold">{destination.name}</h3>
+            <span className="flex items-center px-2 py-1 text-sm text-yellow-700 bg-yellow-100 rounded-full">
+            ⭐ {destination.rating}
+            </span>
+          </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-600">{destination.location}</p>
+            <p className="font-bold">{destination.price}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+>>>>>>> 802b67161729ffd81ab941e235dc7f6d12855f9e:src/components/common/DestinationGrid.jsx
           ))}
         </div>
       </div>
