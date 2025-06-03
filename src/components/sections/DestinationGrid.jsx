@@ -9,7 +9,7 @@ export default function DestinationGrid() {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/destinations"); 
+        const response = await axios.get("http://localhost:5000/recommendations/popular"); 
         setDestinations(response.data.recos); // ambil array recos dari object response
         console.log("Recommendations API response:", response.data.recos);
       } catch (error) {
