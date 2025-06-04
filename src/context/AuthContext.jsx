@@ -1,3 +1,4 @@
+// untuk mengingat status user login atau tidak di semua page
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser, registerUser, checkAuth, logoutUser as apiLogout } from '../api/auth'; //
@@ -39,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     const data = await loginUser(email, password);
     localStorage.setItem('token', data.token);
     setToken(data.token);
-    const userData = await checkAuth(); // Mendapatkan data pengguna
+    const userData = await checkAuth(); 
     console.log("AuthProvider: Login successful, user:", userData);
     setUser(userData);
     setIsAuthenticated(true);
@@ -71,7 +72,7 @@ export const AuthProvider = ({ children }) => {
      text: 'Registrasi berhasil! Silakan login.',
      icon: 'success',
    });
-      navigate('/login'); // Arahkan ke halaman login setelah registrasi
+      navigate('/login'); 
       return data;
     } catch (err) {
       Swal.fire({
@@ -85,7 +86,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await apiLogout(); // Panggil API logout
+      await apiLogout(); 
     } catch (error) {
       console.error("API Logout error:", error);
     }
@@ -100,7 +101,7 @@ export const AuthProvider = ({ children }) => {
     timer: 2000,
     showConfirmButton: false
   });
-    navigate('/'); // Arahkan ke halaman utama setelah logout
+    navigate('/'); 
   };
 
   return (

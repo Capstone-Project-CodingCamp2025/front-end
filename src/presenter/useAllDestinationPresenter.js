@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getAllPlaces } from '../api/place'; 
+import { getPopularRecommendations } from '../api/recommendations';
 
 export function useAllDestinationPresenter() {
   const [destinations, setDestinations] = useState([]);
@@ -10,7 +10,7 @@ export function useAllDestinationPresenter() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await getAllPlaces(); 
+      const data = await getPopularRecommendations(); 
       setDestinations(data || []); 
     } catch (err) {
       console.error("Presenter: Gagal mengambil destinasi:", err);

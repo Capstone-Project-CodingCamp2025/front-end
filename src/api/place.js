@@ -22,5 +22,3 @@ export const getPlaceById = async (id) => {
     throw error.response?.data || error.message;
   }
 };
-
-// Tambahkan fungsi lain pencarian, filter, dll.

@@ -1,8 +1,6 @@
 // src/App.jsx
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom';
-import Swal from 'sweetalert2';
-
 
 // Layout Components
 import Navbar from './components/layout/Navbar';
@@ -11,6 +9,7 @@ import Footer from './components/layout/Footer';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import LoadingScreen from './components/common/LoadingScreen';
+import ProtectedRoute from './components/common/ProtectedRoute';
 import Home from './pages/Home';
 import About from './pages/About';
 import Alldestination from './pages/destination/Alldestination';
@@ -67,7 +66,8 @@ function App() {
 
   return (
     <BrowserRouter>
-    <AuthProvider>
+      <AuthProvider>
+        <ErrorBoundary>
       <Routes>
         {/* Rute yang menggunakan MainLayout */}
         <Route element={<MainLayout />}>
@@ -93,6 +93,7 @@ function App() {
 
         {/* <Route path="*" element={<NotFoundPage />} /> */}
       </Routes>
+        </ErrorBoundary>
       </AuthProvider>
     </BrowserRouter>
   );
@@ -103,12 +104,11 @@ const AppRoutes = () => {
   const { isLoading: isAuthLoading } = useAuth(); // Ambil isLoading dari context auth
 
   // Loading screen awal saat AuthProvider sedang memverifikasi token
-  // Ini menggantikan isLoading awal di App.jsx
   const [isInitialAppLoading, setIsInitialAppLoading] = useState(true);
    useEffect(() => {
     const timer = setTimeout(() => {
       setIsInitialAppLoading(false);
-    }, 1500); // Sesuaikan durasi loading awal aplikasi jika perlu
+    }, 1500); 
     return () => clearTimeout(timer);
   }, []);
 
@@ -131,7 +131,7 @@ const AppRoutes = () => {
         <Route path="/user" element={<ProtectedRoute><UserPage /></ProtectedRoute>} />
         <Route path="/bookmark" element={<ProtectedRoute><BookmarkPage /></ProtectedRoute>} />
         <Route path="/explore-more" element={<Alldestination />} /> 
-        {/* ExploreMore mungkin tidak perlu dilindungi, Alldestination adalah contoh */}
+        {/* Tambahkan rute lain yang butuh MainLayout di sini */}
 
       </Route>
 

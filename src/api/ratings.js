@@ -11,7 +11,7 @@ export const submitRating = async (placeId, rating, review, userName) => {
       userName 
     }, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}` // Jika rating membutuhkan otorisasi
+        Authorization: `Bearer ${localStorage.getItem('token')}` 
       }
     });
     return response.data;

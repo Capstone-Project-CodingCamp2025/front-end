@@ -1,3 +1,4 @@
+//menangkap error yang tidak tertangkap (uncaught errors) yang terjadi di dalam render komponen React
 import React from 'react';
 
 class ErrorBoundary extends React.Component {
@@ -7,24 +8,21 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
-    // Memperbarui state agar render berikutnya menampilkan fallback UI.
     return { hasError: true, error };
   }
 
   componentDidCatch(error, errorInfo) {
-    // Anda juga bisa log error ke layanan pelaporan error
     console.error("Uncaught error:", error, errorInfo);
     this.setState({ errorInfo });
   }
 
   render() {
     if (this.state.hasError) {
-      // Anda dapat merender fallback UI kustom apa pun
       return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-red-50 text-red-800 p-8 text-center">
           <h1 className="text-3xl font-bold mb-4">Oops! Terjadi Kesalahan.</h1>
           <p className="text-lg mb-6">Maaf, ada yang tidak beres. Kami sedang berusaha memperbaikinya.</p>
-          {/* Untuk debugging, Anda bisa menampilkan detail error */}
+          {/* Untuk debugging, menampilkan detail error */}
           {this.props.showErrorDetails && this.state.error && (
             <details className="mt-4 p-4 bg-red-100 rounded-lg text-left max-w-xl overflow-auto">
               <summary className="font-semibold cursor-pointer">Detail Error</summary>
