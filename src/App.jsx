@@ -1,12 +1,14 @@
 // src/App.jsx
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { BrowserRouter, Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
 
 // Layout Components
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 // import AuthLayout from './components/layout/AuthLayout'; 
+import { AuthProvider, useAuth } from './context/AuthContext';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import LoadingScreen from './components/common/LoadingScreen';
 import Home from './pages/Home';
@@ -65,7 +67,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <ErrorBoundary>
+    <AuthProvider>
       <Routes>
         {/* Rute yang menggunakan MainLayout */}
         <Route element={<MainLayout />}>
@@ -91,9 +93,60 @@ function App() {
 
         {/* <Route path="*" element={<NotFoundPage />} /> */}
       </Routes>
-      </ErrorBoundary>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
+
+// Komponen baru untuk menangani Routes dan LoadingScreen berdasarkan auth
+const AppRoutes = () => {
+  const { isLoading: isAuthLoading } = useAuth(); // Ambil isLoading dari context auth
+
+  // Loading screen awal saat AuthProvider sedang memverifikasi token
+  // Ini menggantikan isLoading awal di App.jsx
+  const [isInitialAppLoading, setIsInitialAppLoading] = useState(true);
+   useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialAppLoading(false);
+    }, 1500); // Sesuaikan durasi loading awal aplikasi jika perlu
+    return () => clearTimeout(timer);
+  }, []);
+
+
+  if (isInitialAppLoading || isAuthLoading) {
+    return <LoadingScreen />; //
+  }
+
+  return (
+    <Routes>
+      {/* Rute yang menggunakan MainLayout */}
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/destination" element={<Alldestination />} />
+        <Route path="/destination/:id" element={<DestinationDetail />} />
+        <Route path="/contact" element={<Contact />} /> {/* */}
+        
+        {/* Rute yang dilindungi */}
+        <Route path="/user" element={<ProtectedRoute><UserPage /></ProtectedRoute>} />
+        <Route path="/bookmark" element={<ProtectedRoute><BookmarkPage /></ProtectedRoute>} />
+        <Route path="/explore-more" element={<Alldestination />} /> 
+        {/* ExploreMore mungkin tidak perlu dilindungi, Alldestination adalah contoh */}
+
+      </Route>
+
+      {/* Rute yang menggunakan AuthLayout */}
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forget-password" element={<ForgetPassword />} />
+        <Route path="/otp-reset" element={<OtpReset />} />
+        <Route path="/new-password" element={<NewPassword />} />
+      </Route>
+
+      {/* <Route path="*" element={<NotFoundPage />} /> */}
+    </Routes>
+  );
+};
 
 export default App;

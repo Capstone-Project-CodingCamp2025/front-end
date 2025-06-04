@@ -1,26 +1,29 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { registerUser } from '../../api/auth';
+import { useAuth } from '../../context/AuthContext';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 export default function Register() {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await registerUser(username, email, password); // Panggil fungsi API
-      toast.success('Registrasi berhasil! Silakan login.');
-      navigate('/login');
+      await register(username, email, password);
     } catch (err) {
       console.error('Register error:', err);
-      toast.error(err.message || 'Register gagal. Mohon coba lagi.'); // Notifikasi error
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: err.message || 'Register gagal. Coba lagi.',
+      });
     } finally {
       setLoading(false);
     }

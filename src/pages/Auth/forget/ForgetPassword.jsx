@@ -2,7 +2,7 @@
 import { Link,useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { forgotPassword } from '../../../api/auth';
-import { toast } from 'react-toastify'; // Import fungsi forgotPassword
+import Swal from 'sweetalert2';
 
 export default function ForgetPassword() {
   const navigate = useNavigate();
@@ -14,11 +14,19 @@ export default function ForgetPassword() {
     setLoading(true);
     try {
       await forgotPassword(email);
-      toast.success('Link reset telah dikirim ke email Anda. Silakan cek kotak masuk Anda.');
+      Swal.fire({
+        icon: 'success',
+        title: 'Terkirim!',
+        text: 'Link reset telah dikirim ke email Anda. Silakan cek kotak masuk Anda.',
+      });
       navigate('/otp-reset', { state: { email } }); // Kirim email ke halaman OTP
     } catch (err) {
       console.error('Forgot password error:', err);
-      toast.error(err.message || 'Gagal mengirim link reset. Pastikan email benar.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: err.message || 'Gagal mengirim link reset. Pastikan email benar.',
+      });
     } finally {
       setLoading(false);
     }

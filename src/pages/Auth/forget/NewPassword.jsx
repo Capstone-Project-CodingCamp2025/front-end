@@ -2,7 +2,7 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { resetPassword } from '../../../api/auth'; // Import fungsi resetPassword
-import { toast } from 'react-toastify';
+import Swal from 'sweetalert2'; // Impor Swal
 
 export default function NewPassword() {
   const navigate = useNavigate();
@@ -17,22 +17,38 @@ export default function NewPassword() {
     e.preventDefault();
     setLoading(true);
     if (!email || !otp) {
-      toast.error('Email atau OTP tidak valid. Silakan mulai ulang proses reset password.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Kesalahan!',
+        text: 'Email atau OTP tidak valid. Silakan mulai ulang proses reset password.',
+      });
       setLoading(false);
       return;
     }
     if (newPassword !== confirmPassword) {
-      toast.error('Kata sandi baru dan konfirmasi kata sandi tidak cocok.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Tidak Cocok!',
+        text: 'Kata sandi baru dan konfirmasi kata sandi tidak cocok.',
+      });
       setLoading(false);
       return;
     }
     try {
       await resetPassword(email, newPassword, otp);
-      toast.success('Kata sandi Anda telah berhasil diatur ulang. Silakan login dengan kata sandi baru Anda.');
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Kata sandi Anda telah berhasil diatur ulang. Silakan login dengan kata sandi baru Anda.',
+      });
       navigate('/login');
     } catch (err) {
       console.error('Reset password error:', err);
-      toast.error(err.message || 'Gagal mengatur ulang kata sandi. Mohon coba lagi.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: err.message || 'Gagal mengatur ulang kata sandi. Mohon coba lagi.',
+      });
     } finally {
       setLoading(false);
     }

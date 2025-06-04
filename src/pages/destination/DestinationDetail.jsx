@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { getPlaceById } from '../../api/place'; 
 import { submitRating, getRatingsForPlace } from '../../api/ratings';
-import { toast } from 'react-toastify'; 
+import Swal from 'sweetalert2'; 
 
 const Destinationdetail = () => {
   const { id } = useParams();
@@ -79,30 +79,42 @@ const Destinationdetail = () => {
       bookmarks.push({ id: destination.id, name: destination.name, image: destination.image, rating: destination.rating, location: destination.location, price: destination.price });
       localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
       setBookmarked(true);
-      toast.success('Destinasi berhasil ditambahkan ke bookmark!');
+      Swal.fire({
+     icon: 'success',
+     title: 'Ditambahkan!',
+     text: 'Destinasi berhasil ditambahkan ke bookmark!',
+     timer: 1500,
+     showConfirmButton: false
+   });
     } else {
       bookmarks = bookmarks.filter((item) => String(item.id) !== String(destination.id));
       localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
       setBookmarked(false);
-      toast.info('Destinasi dihapus dari bookmark.');
+      Swal.fire({
+     icon: 'info',
+     title: 'Dihapus',
+     text: 'Destinasi dihapus dari bookmark.',
+     timer: 1500,
+     showConfirmButton: false
+   });
     }
   };
 
   const handleSubmitReview = async (e) => {
     e.preventDefault();
     if (!reviewForm.name || !reviewForm.review || reviewForm.rating <= 0) {
-      toast.error('Mohon lengkapi semua field dan berikan rating!');
+      Swal.fire('Oops...', 'Mohon lengkapi semua field dan berikan rating!', 'error');
       return;
     }
     
     try {
       const newReview = await submitRating(destination.id, reviewForm.rating, reviewForm.review, reviewForm.name);
       setPlaceReviews([...placeReviews, newReview]);
-      toast.success('Ulasan berhasil dikirim!');
+      Swal.fire('Sukses!', 'Ulasan berhasil dikirim!', 'success');
       setReviewForm({ name: '', review: '', rating: 0 });
     } catch (err) {
       console.error('Failed to submit review:', err);
-      toast.error(err.message || 'Gagal mengirim ulasan. Pastikan Anda sudah login.');
+      Swal.fire('Gagal!', err.message || 'Gagal mengirim ulasan. Pastikan Anda sudah login.', 'error');
     }
   };
 

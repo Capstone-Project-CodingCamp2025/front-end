@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { loginUser } from '../../api/auth';
-import { toast } from 'react-toastify';
+import { useAuth } from '../../context/AuthContext';
+import Swal from 'sweetalert2';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -12,15 +13,15 @@ export default function Login() {
 const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      const data = await loginUser(email, password);
-      localStorage.setItem('token', data.token); // Sesuaikan jika backend mengembalikan struktur berbeda
-      toast.success('Login berhasil!'); // Notifikasi sukses
-      navigate('/user');
+      await login(email, password); 
     } catch (err) {
       console.error('Login error:', err);
-      toast.error(err.message || 'Login gagal. Periksa kredensial Anda.'); // Notifikasi error
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: err.message || 'Login gagal. Periksa kredensial Anda.',
+    }); 
     } finally {
       setLoading(false);
     }

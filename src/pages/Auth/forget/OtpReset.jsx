@@ -2,7 +2,7 @@
 import { Link,useNavigate,useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { verifyOtp } from '../../../api/auth'; // Import fungsi verifyOtp
-import { toast } from 'react-toastify';
+import Swal from 'sweetalert2'; // Impor Swal
 
 export default function OtpReset() {
   const navigate = useNavigate();
@@ -16,17 +16,29 @@ export default function OtpReset() {
     setLoading(true);
 
     if (!email) {
-      toast.error('Email tidak ditemukan. Silakan kembali ke halaman lupa password.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Email Tidak Ditemukan',
+        text: 'Email tidak ditemukan. Silakan kembali ke halaman lupa password.',
+      });
       setLoading(false);
       return;
     }
     try {
       await verifyOtp(email, otp);
-      toast.success('OTP berhasil diverifikasi. Sekarang Anda bisa mengatur kata sandi baru.');
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'OTP berhasil diverifikasi. Sekarang Anda bisa mengatur kata sandi baru.',
+      });
       navigate('/new-password', { state: { email, otp } }); // Kirim email dan OTP ke halaman New Password
     } catch (err) {
       console.error('OTP verification error:', err);
-      toast.error(err.message || 'Verifikasi OTP gagal. Coba lagi.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: err.message || 'Verifikasi OTP gagal. Coba lagi.',
+      });
     } finally {
       setLoading(false);
     }

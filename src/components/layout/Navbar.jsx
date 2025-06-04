@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom'; 
+import { Link, NavLink, useNavigate } from 'react-router-dom'; 
+import { useAuth } from '../../context/AuthContext';
 
 
 const Logo = () => (
@@ -18,6 +19,14 @@ const Logo = () => (
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated, user, logout } = useAuth(); // Gunakan context
+  console.log("Navbar: isAuthenticated:", isAuthenticated, "User:", user);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    setIsOpen(false); 
+  };
 
   const navLinks = [
     { name: 'Beranda', path: '/' },
@@ -49,32 +58,65 @@ export default function Navbar() {
                 {link.name}
               </NavLink>
             ))}
+            {isAuthenticated && ( // Tampilkan link Bookmark jika sudah login
+              <NavLink
+                key="Bookmark"
+                to="/bookmark" // Rute ke halaman bookmark
+                className={({ isActive }) =>
+                  `${baseLinkClasses} ${isActive ? activeLinkClasses : inactiveLinkClasses}`
+                }
+              >
+                Bookmark
+              </NavLink>
+            )}
           </div>
 
           {/* Auth Buttons - Desktop */}
-          <div className="items-center hidden ml-4 space-x-2 md:flex">
-            <Link
-              to="/login"
-              className="px-4 py-2 text-sm font-medium text-white transition-colors duration-200 rounded-md hover:bg-blue-700"
-            >
-              Masuk
-            </Link>
-            <Link
-              to="/register"
-              className="px-4 py-2 text-sm font-bold text-blue-600 transition-all duration-200 bg-white rounded-md shadow-sm hover:bg-blue-50 hover:scale-105"
-            >
-              Daftar
-            </Link>
+          <div className="items-center hidden ml-4 space-x-2 md:flex"> {/* */}
+            {isAuthenticated ? (
+              <>
+                <NavLink
+                  to="/user" 
+                  className="px-3 py-2 text-sm font-medium text-white rounded-md hover:bg-blue-700"
+                >
+                  Halo, {user?.name || user?.username || 'Pengguna'}!
+                </NavLink>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-orange-500 rounded-md hover:bg-orange-600"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="px-4 py-2 text-sm font-medium text-white transition-colors duration-200 rounded-md hover:bg-blue-700"
+                >
+                  Masuk
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-4 py-2 text-sm font-bold text-blue-600 transition-all duration-200 bg-white rounded-md shadow-sm hover:bg-blue-50 hover:scale-105"
+                >
+                  Daftar
+                </Link>
+              </>
+            )}
           </div>
-
           
-          <div className="flex items-center md:hidden">
-            <Link
-              to="/login"
-              className="px-3 py-2 mr-2 text-sm font-medium text-white rounded-md hover:bg-blue-700" 
-            >
-              Masuk
-            </Link>
+          {/* Mobile Hamburger Button */}
+          <div className="flex items-center md:hidden"> {/* */}
+             {!isAuthenticated && ( // Tampilkan tombol Masuk jika belum login
+                 <Link
+                  to="/login"
+                  className="px-3 py-2 mr-2 text-sm font-medium text-white rounded-md hover:bg-blue-700"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Masuk
+                </Link>
+             )}
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
@@ -117,13 +159,47 @@ export default function Navbar() {
               {link.name}
             </NavLink>
           ))}
-          <Link
-            to="/register"
-            className="block w-full px-3 py-2 mt-2 text-base font-bold text-center text-blue-600 bg-white rounded-md hover:bg-blue-50"
-            onClick={() => setIsOpen(false)}
-          >
-            Daftar
-          </Link>
+          {isAuthenticated && ( // Tampilkan link Bookmark mobile jika sudah login
+            <NavLink
+                key="Bookmark-mobile"
+                to="/bookmark"
+                className={({ isActive }) =>
+                `block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${isActive ? activeLinkClasses : inactiveLinkClasses}`
+                }
+                onClick={() => setIsOpen(false)}
+            >
+                Bookmark
+            </NavLink>
+          )}
+
+          {/* Auth Buttons - Mobile */}
+          {isAuthenticated ? (
+            <>
+              <NavLink
+                to="/user" 
+                className={({ isActive }) =>
+                  `block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${isActive ? activeLinkClasses : inactiveLinkClasses}`
+                }
+                onClick={() => setIsOpen(false)}
+              >
+                Halo, {user?.name || user?.username || 'Pengguna'}!
+              </NavLink>
+              <button
+                onClick={handleLogout}
+                className="block w-full px-3 py-2 mt-1 text-base font-medium text-left text-blue-100 rounded-md hover:bg-orange-500 hover:text-white"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/register"
+              className="block w-full px-3 py-2 mt-2 text-base font-bold text-center text-blue-600 bg-white rounded-md hover:bg-blue-50"
+              onClick={() => setIsOpen(false)}
+            >
+              Daftar
+            </Link>
+          )}
         </div>
       </div>
     </nav>
