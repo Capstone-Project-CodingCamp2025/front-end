@@ -10,8 +10,8 @@ export default function DestinationGrid() {
     const fetchRecommendations = async () => {
       try {
         const response = await axios.get("http://localhost:5000/recommendations/popular"); 
-        setDestinations(response.data.recos); // ambil array recos dari object response
-        console.log("Recommendations API response:", response.data.recos);
+        setDestinations(response.data.destinations);
+        console.log("Recommendations API response:", response.data.destinations);
       } catch (error) {
         console.error("Failed to fetch recommendations:", error);
       }

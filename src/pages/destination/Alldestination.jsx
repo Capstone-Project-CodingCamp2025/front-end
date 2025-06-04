@@ -61,14 +61,22 @@ export default function Alldestination() {
     window.scrollTo(0, 0);
   };
 
+  // ENDPOINT REKOMENDASI SEBELUM LOGIN
   useEffect(() => {
     const fetchDestinations = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get("http://localhost:5000/recommendations/popular"); 
-        setDestinations(response.data.destinations || response.data.recos || response.data || []);
+        console.log('Fetching from:', "http://localhost:5000/recommendations/popular");
+        const response = await axios.get("http://localhost:5000/recommendations/popular");
+        console.log('Response received:', response.data);
+        
+        const destinations = response.data.destinations || response.data.recos || response.data || [];
+        console.log('Destinations to set:', destinations);
+        
+        setDestinations(destinations);
       } catch (err) {
+        console.error('Fetch error:', err);
         setError("Gagal memuat destinasi. Silakan coba lagi nanti.");
       } finally {
         setLoading(false);
