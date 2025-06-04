@@ -8,6 +8,7 @@ export const getAllPlaces = async () => {
     const response = await axios.get(`${API_BASE_URL}/places`);
     return response.data;
   } catch (error) {
+    console.error("Model: Gagal mengambil semua tempat:", error.response?.data || error.message);
     throw error.response?.data || error.message;
   }
 };
@@ -17,8 +18,9 @@ export const getPlaceById = async (id) => {
     const response = await axios.get(`${API_BASE_URL}/places/${id}`);
     return response.data;
   } catch (error) {
+    console.error(`Model: Gagal mengambil tempat dengan ID ${id}:`, error.response?.data || error.message);
     throw error.response?.data || error.message;
   }
 };
 
-// Tambahkan fungsi lain jika ada pencarian, filter, dll.
+// Tambahkan fungsi lain pencarian, filter, dll.

@@ -1,38 +1,27 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
+import { useLoginPresenter } from '../../presenter/useLoginPresenter';
 
 export default function Login() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    isLoading,
+    handleLogin,
+  } = useLoginPresenter();
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      await login(email, password); 
-    } catch (err) {
-      console.error('Login error:', err);
-      Swal.fire({
-        icon: 'error',
-        title: 'Gagal!',
-        text: err.message || 'Login gagal. Periksa kredensial Anda.',
-    }); 
-    } finally {
-      setLoading(false);
-    }
+    await handleLogin();
   };
 
-  return (
+ return (
     <main className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <div className="flex flex-col w-full max-w-4xl overflow-hidden bg-white shadow-2xl md:flex-row rounded-2xl">
-        {/* Form Login */}
         <div className="flex flex-col justify-center w-full p-8 md:w-1/2 lg:p-12">
-          <div className="mb-6 md:mb-8">
+          {/* (Tombol kembali) */}
+           <div className="mb-6 md:mb-8">
             <Link
               to="/"
               className="inline-flex items-center text-sm text-blue-600 transition-colors duration-200 hover:text-blue-800 group"
@@ -114,14 +103,14 @@ const handleSubmit = async (e) => {
             </div>
             <button
               type="submit"
-              disabled={loading}
+              disabled={isLoading} 
               className={`w-full py-3 mt-3 font-semibold text-white transition-all duration-300 transform rounded-lg ${
-                loading
+                isLoading
                   ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-blue-600 hover:bg-blue-700 hover:scale-105'
               } focus:outline-none focus:ring-2 focus:ring-blue-500`}
             >
-              {loading ? 'Loading...' : 'Log In'}
+              {isLoading ? 'Loading...' : 'Log In'}
             </button>
             <div className="mt-4 text-sm text-center text-gray-600">
               Belum punya akun?{' '}
@@ -134,8 +123,7 @@ const handleSubmit = async (e) => {
             </div>
           </form>
         </div>
-
-        {/* Gambar */}
+         {/* Gambar */}
         <div className="relative hidden w-full md:w-1/2 md:block">
           <img
             src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"

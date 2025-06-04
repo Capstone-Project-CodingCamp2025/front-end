@@ -16,10 +16,10 @@ export const getPersonalizedRecommendations = async (userId, preferences) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/recommendations/personalized`, {
       userId,
-      preferences // Kirim preferensi pengguna untuk rekomendasi
+      preferences 
     }, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}` // Jika rekomendasi personal membutuhkan otorisasi
+        Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     });
     return response.data;

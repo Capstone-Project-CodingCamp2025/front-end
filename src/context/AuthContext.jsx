@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser, registerUser, checkAuth, logoutUser as apiLogout } from '../api/auth'; //
-import Swal from 'sweetalert2'; // Impor Swal
+import Swal from 'sweetalert2';
 
 const AuthContext = createContext(null);
 
@@ -19,15 +19,14 @@ export const AuthProvider = ({ children }) => {
     console.log("AuthProvider: Stored token:", storedToken);
     if (storedToken) {
       try {
-        const userData = await checkAuth(); // Pastikan ini mengembalikan data user yang valid
+        const userData = await checkAuth(); 
         setUser(userData);
         setToken(storedToken);
-        setIsAuthenticated(true); // <-- PENTING
+        setIsAuthenticated(true); 
       } catch (error) {
         console.error("Auth check failed:", error);
         localStorage.removeItem('token');
-        // ... reset state lainnya ...
-        setIsAuthenticated(false); // <-- PENTING
+        setIsAuthenticated(false); 
       }
     }
     setIsLoading(false);
@@ -43,22 +42,22 @@ export const AuthProvider = ({ children }) => {
     const userData = await checkAuth(); // Mendapatkan data pengguna
     console.log("AuthProvider: Login successful, user:", userData);
     setUser(userData);
-    setIsAuthenticated(true); // <-- PENTING
+    setIsAuthenticated(true);
     console.log("AuthProvider: isAuthenticated set to true after login");
     Swal.fire({
-    title: 'Berhasil!',
-    text: 'Login berhasil!',
-    icon: 'success',
-    timer: 2000, 
+      title: 'Berhasil!',
+      text: 'Login berhasil!',
+      icon: 'success',
+      timer: 2000, 
     showConfirmButton: false   });
     navigate('/user');
     return data;
   } catch (err) {
     Swal.fire({
-     title: 'Gagal!',
-     text: err.message || 'Login gagal. Periksa kredensial Anda.',
-     icon: 'error',
-   });
+      title: 'Gagal!',
+      text: err.message || 'Login gagal. Periksa kredensial Anda.',
+      icon: 'error',
+    });
     setIsAuthenticated(false); 
     throw err;
   }
@@ -86,10 +85,9 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await apiLogout(); // Panggil API logout jika ada
+      await apiLogout(); // Panggil API logout
     } catch (error) {
       console.error("API Logout error:", error);
-      // Tetap lanjutkan proses logout di client
     }
     localStorage.removeItem('token');
     setUser(null);

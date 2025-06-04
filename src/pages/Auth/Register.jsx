@@ -1,35 +1,24 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { useState } from 'react';
-import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
+import { useRegisterPresenter } from '../../presenter/useRegisterPresenter';
 
 export default function Register() {
-  const navigate = useNavigate();
-  const { register } = useAuth();
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const {
+    username,
+    setUsername,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    isLoading,
+    handleRegister,
+  } = useRegisterPresenter();
 
-
- const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      await register(username, email, password);
-    } catch (err) {
-      console.error('Register error:', err);
-      Swal.fire({
-        icon: 'error',
-        title: 'Gagal!',
-        text: err.message || 'Register gagal. Coba lagi.',
-      });
-    } finally {
-      setLoading(false);
-    }
+    await handleRegister();
   };
 
-  return (
+return (
     <main className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <div className="flex flex-col w-full max-w-4xl overflow-hidden bg-white shadow-2xl md:flex-row rounded-2xl">
         <div className="relative hidden w-full md:w-1/2 md:block">
@@ -41,9 +30,7 @@ export default function Register() {
           <div className="absolute inset-0 opacity-25 bg-gradient-to-tr from-blue-600 to-purple-600"></div>
         </div>
 
-        {/* Bagian Form Register */}
         <div className="flex flex-col justify-center w-full p-8 md:w-1/2 lg:p-12">
-          {/* Tombol Kembali ke Beranda */}
           <div className="mb-6 md:mb-8">
             <Link
               to="/"
@@ -87,6 +74,8 @@ export default function Register() {
                 id="username-register"
                 placeholder="username_unik"
                 className="w-full px-4 py-3 transition-colors duration-300 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
@@ -102,6 +91,8 @@ export default function Register() {
                 id="email-register"
                 placeholder="kamu@contoh.com"
                 className="w-full px-4 py-3 transition-colors duration-300 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -117,14 +108,17 @@ export default function Register() {
                 id="password-register"
                 placeholder="••••••••"
                 className="w-full px-4 py-3 transition-colors duration-300 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
             <button
               type="submit"
-              className="w-full py-3 mt-3 font-semibold text-white transition-all duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 hover:scale-105"
+              disabled={isLoading}
+              className="w-full py-3 mt-3 font-semibold text-white transition-all duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 hover:scale-105 disabled:bg-gray-400"
             >
-              Register
+              {isLoading ? 'Loading...' : 'Register'}
             </button>
             <div className="mt-4 text-sm text-center text-gray-600">
               Sudah punya akun?{' '}

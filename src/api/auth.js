@@ -50,7 +50,6 @@ export const resetPassword = async (email, newPassword, otp) => {
   }
 };
 
-// Fungsi lain yang mungkin Anda butuhkan:
 export const logoutUser = async () => {
   try {
     const response = await axios.post(`${API_BASE_URL}/logout`);
@@ -62,13 +61,12 @@ export const logoutUser = async () => {
 
 export const checkAuth = async () => {
   try {
-    // Asumsi ada endpoint untuk memverifikasi token atau sesi saat ini
     const response = await axios.get(`${API_BASE_URL}/me`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}` // Mengirim token dari localStorage
       }
     });
-    return response.data; // Mengembalikan data user jika terautentikasi
+    return response.data; 
   } catch (error) {
     throw error.response?.data || error.message;
   }

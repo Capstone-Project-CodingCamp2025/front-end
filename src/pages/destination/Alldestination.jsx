@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useIntersectionObserver from '../../Hook/useIntersectionObserver'; 
 import { getAllPlaces } from '../../api/place';
+import { useAllDestinationPresenter } from '../../presenter/useAllDestinationPresenter'; // Import presenter jika diperlukan
 
 const AnimatedDestinationCard = ({ destination, index, onCardClick }) => {
   const [cardRef, isCardVisible] = useIntersectionObserver({ threshold: 0.1, triggerOnce: true });
@@ -52,37 +53,19 @@ const AnimatedDestinationCard = ({ destination, index, onCardClick }) => {
 
 
 export default function Alldestination() {
-  const navigate = useNavigate();
-  const [destinations, setDestinations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // Presenter untuk mendapatkan state dan logika
+  const { destinations, isLoading, error } = useAllDestinationPresenter();
 
   const handleScrollToTop = () => {
     window.scrollTo(0, 0);
   };
 
-  useEffect(() => {
-    const fetchDestinations = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await getAllPlaces(); // Panggil fungsi API
-        setDestinations(data); // Asumsi mengembalikan array destinasi langsung
-      } catch (err) {
-        setError("Gagal memuat destinasi. Silakan coba lagi nanti.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDestinations();
-  }, []);
-
-  const [titleRef, isTitleVisible] = useIntersectionObserver({ threshold: 0.5, triggerOnce: true });
+  const [titleRef, isTitleVisible] = useIntersectionObserver({ threshold: 0.5, triggerOnce: true }); //
   const baseTransitionClasses = "transition-all duration-700 ease-out transform";
   const initialClasses = "opacity-0 translate-y-8";
   const visibleClasses = "opacity-100 translate-y-0";
 
-  if (loading) {
+  if (isLoading) {
     return <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] text-gray-600 text-lg">Memuat destinasi...</div>;
   }
 
@@ -101,7 +84,7 @@ export default function Alldestination() {
           <p className="mt-2 text-lg text-gray-600">Jelajahi berbagai pilihan wisata menarik di Sumatera.</p>
         </div>
 
-        {destinations.length === 0 && !loading && (
+        {destinations.length === 0 && !isLoading && (
           <p className="text-center text-gray-500">Tidak ada destinasi yang tersedia saat ini.</p>
         )}
 
