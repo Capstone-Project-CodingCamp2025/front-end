@@ -1,12 +1,12 @@
   const destinations = [
-   {
-    id: 1,
-    name: 'Danau Toba',
-    image: 'https://images.unsplash.com/photo-1587007161986-d56743677eba?q=80&w=1467&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    rating: 4.8,
-    location: 'Sumatera Utara',
-    price: 'Rp 1.2jt',
-  },
+  //  {
+  //   id: 1,
+  //   name: 'Danau Toba',
+  //   image: 'https://images.unsplash.com/photo-1582972236019-ea9e36d7f32e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  //   rating: 4.8,
+  //   location: 'Sumatera Utara',
+  //   price: 'Rp 1.2jt',
+  // },
   {
     id: 2,
     name: 'Pulau Samosir',
@@ -25,14 +25,14 @@
     price: 'Rp 800rb',
     description: 'Salah satu destinasi ekowisata paling populer di Sumatera Utara, tempat ini terkenal sebagai lokasi terbaik untuk menyaksikan orangutan Sumatera di habitat aslinya. Dikelilingi oleh hutan tropis yang asri dan sungai yang jernih, kawasan ini menawarkan keindahan alam yang memukau dan udara yang sejuk. Setiap tahunnya, ribuan wisatawan dari berbagai negara datang untuk menikmati pengalaman alam yang autentik. Beragam aktivitas seru dapat dilakukan di sini, mulai dari trekking di tengah hutan, berkemah di alam terbuka, hingga menyusuri sungai yang menenangkan. Tempat ini adalah surga tersembunyi bagi para pecinta alam dan petualangan.',
   },
-  {
-    id: 4,
-    name: 'Air Terjun Sipiso-piso',
-    image: 'https://images.unsplash.com/photo-1626696445855-5f1f90db7ae8?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    rating: 4.9,
-    location: 'Sumatera Utara',
-    price: 'Rp 600rb',
-  },
+  // {
+  //   id: 4,
+  //   name: 'Air Terjun Sipiso-piso',
+  //   image: 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  //   rating: 4.9,
+  //   location: 'Sumatera Utara',
+  //   price: 'Rp 600rb',
+  // },
   {
     id: 5,
     name: 'Jam Gadang',
@@ -41,24 +41,6 @@
     location: 'Bukittinggi, Sumatera Barat',
     price: 'Rp 500rb',
     description: 'Ikon kota Bukittinggi yang menjadi landmark terkenal di Sumatera Barat.',
-  },
-  {
-    id: 6,
-    name: 'Lembah Harau',
-    image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.7,
-    location: 'Sumatera Barat',
-    price: 'Rp 750rb',
-    description: 'Lembah indah dengan tebing-tebing tinggi dan air terjun yang mempesona.',
-  },
-  {
-    id: 6,
-    name: 'Lembah Harau',
-    image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    rating: 4.7,
-    location: 'Sumatera Barat',
-    price: 'Rp 750rb',
-    description: 'Lembah indah dengan tebing-tebing tinggi dan air terjun yang mempesona.',
   },
   {
     id: 6,
