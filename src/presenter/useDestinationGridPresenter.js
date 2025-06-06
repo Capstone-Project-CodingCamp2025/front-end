@@ -13,7 +13,7 @@ export function useDestinationGridPresenter() {
     setError(null);
     try {
       const data = await getPopularRecommendations();
-      setDestinations(data.recos || data || []);
+      setDestinations(data.destinations || data || []);
     } catch (err) {
       console.error("Presenter: Failed to fetch recommendations:", err);
       setError("Gagal memuat rekomendasi populer.");

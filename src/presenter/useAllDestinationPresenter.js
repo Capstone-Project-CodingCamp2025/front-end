@@ -11,7 +11,14 @@ export function useAllDestinationPresenter() {
     setError(null);
     try {
       const data = await getPopularRecommendations(); 
-      setDestinations(data || []); 
+      if (Array.isArray(data)) {
+        setDestinations(data);
+      } else if (Array.isArray(data.destinations)) {
+        setDestinations(data.destinations);
+      } else {
+        console.warn("Unexpected data shape:", data);
+        setDestinations([]); // fallback
+      }
     } catch (err) {
       console.error("Presenter: Gagal mengambil destinasi:", err);
       setError("Gagal memuat destinasi. Silakan coba lagi nanti.");
