@@ -23,6 +23,7 @@ import UserPage from './pages/user/UserPage';
 import BookmarkPage from './pages/user/BookmarkPage';
 import ExploreMore from './pages/destination/ExploreMore';
 import Contact from './pages/Contact';
+import FirstRecommendation from './pages/user/FirstRecommendation';
 // import NotFoundPage from './pages/NotFoundPage'; // Jika Ada halaman 404
 
 
@@ -79,6 +80,7 @@ function App() {
           <Route path="/bookmark" element={<BookmarkPage />} />
           <Route path="/explore-more" element={<ExploreMore />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/first-recommendation" element={<ProtectedRoute><FirstRecommendation /></ProtectedRoute>} />
           {/* Tambahkan rute lain yang butuh MainLayout di sini */}
         </Route>
 

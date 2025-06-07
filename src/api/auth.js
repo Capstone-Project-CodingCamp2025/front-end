@@ -5,10 +5,14 @@ const API_BASE_URL = 'http://localhost:5000/api';
 
 export const loginUser = async (email, password) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/login`, { email, password }, {
-      withCredentials: true 
-    });
-    return response.data; 
+    const response = await axios.post(`${API_BASE_URL}/login`, { email, password });
+    
+    const token = response.data.token; // Pastikan backend mengembalikan { token: '...' }
+
+    // Simpan token ke localStorage/sessionStorage atau state management (e.g., Redux)
+    localStorage.setItem('token', token);
+
+    return response.data;
   } catch (error) {
     throw error.response?.data || error.message;
   }
@@ -60,14 +64,24 @@ export const logoutUser = async () => {
 };
 
 export const checkAuth = async () => {
+  const token = localStorage.getItem('token');
+  
+  console.log('checkAuth: Token from localStorage:', token); // Debug log
+  
+  if (!token) {
+    throw new Error('No token found');
+  }
+  
   try {
-    const response = await axios.get(`${API_BASE_URL}/me`, {
+    const response = await axios.get(`${API_BASE_URL}/check-auth`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}` // Mengirim token dari localStorage
-      }
+        Authorization: `Bearer ${token}`, // Pastikan format Bearer benar
+      },
     });
-    return response.data; 
+    return response.data;
   } catch (error) {
+    console.error('checkAuth error:', error);
     throw error.response?.data || error.message;
   }
 };
+

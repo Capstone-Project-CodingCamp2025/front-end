@@ -14,55 +14,69 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-  const verifyToken = async () => {
-    console.log("AuthProvider: Verifying token...");
-    const storedToken = localStorage.getItem('token');
-    console.log("AuthProvider: Stored token:", storedToken);
-    if (storedToken) {
-      try {
-        const userData = await checkAuth(); 
-        setUser(userData);
-        setToken(storedToken);
-        setIsAuthenticated(true); 
-      } catch (error) {
-        console.error("Auth check failed:", error);
-        localStorage.removeItem('token');
-        setIsAuthenticated(false); 
+    const verifyToken = async () => {
+      console.log("AuthProvider: Verifying token...");
+      const storedToken = localStorage.getItem('token');
+      
+      if (storedToken) {
+        try {
+          const userData = await checkAuth(); 
+          setUser(userData);
+          setToken(storedToken);
+          setIsAuthenticated(true); 
+        } catch (error) {
+          console.error("Auth check failed:", error);
+          // Clear invalid token
+          localStorage.removeItem('token');
+          setToken(null);
+          setUser(null);
+          setIsAuthenticated(false); 
+        }
+      } else {
+        setIsAuthenticated(false);
       }
-    }
-    setIsLoading(false);
-  };
-  verifyToken();
+      setIsLoading(false);
+    };
+    
+    verifyToken();
   }, []);
 
   const login = async (email, password) => {
-  try {
-    const data = await loginUser(email, password);
-    localStorage.setItem('token', data.token);
-    setToken(data.token);
-    const userData = await checkAuth(); 
-    console.log("AuthProvider: Login successful, user:", userData);
-    setUser(userData);
-    setIsAuthenticated(true);
-    console.log("AuthProvider: isAuthenticated set to true after login");
-    Swal.fire({
-      title: 'Berhasil!',
-      text: 'Login berhasil!',
-      icon: 'success',
-      timer: 2000, 
-    showConfirmButton: false   });
-    navigate('/user');
-    return data;
-  } catch (err) {
-    Swal.fire({
-      title: 'Gagal!',
-      text: err.message || 'Login gagal. Periksa kredensial Anda.',
-      icon: 'error',
-    });
-    setIsAuthenticated(false); 
-    throw err;
-  }
-};
+    try {
+      const data = await loginUser(email, password);
+      console.log('Login response data:', data); // Debug response
+      console.log('Token received:', data.token); // Debug token
+      
+      localStorage.setItem('token', data.token);
+      console.log('Token saved to localStorage:', localStorage.getItem('token')); // Debug save
+      
+      setToken(data.token);
+      
+      const userData = await checkAuth(); 
+      console.log("AuthProvider: Login successful, user:", userData);
+      setUser(userData);
+      setIsAuthenticated(true);
+      
+      Swal.fire({
+        title: 'Berhasil!',
+        text: 'Login berhasil!',
+        icon: 'success',
+        timer: 2000, 
+        showConfirmButton: false   
+      });
+      
+      return data;
+    } catch (err) {
+      console.error("Login error in AuthContext:", err);
+      Swal.fire({
+        title: 'Gagal!',
+        text: err.message || 'Login gagal. Periksa kredensial Anda.',
+        icon: 'error',
+      });
+      setIsAuthenticated(false); 
+      throw err;
+    }
+  };
 
   const register = async (username, email, password) => {
     try {

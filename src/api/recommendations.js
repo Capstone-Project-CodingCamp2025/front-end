@@ -1,29 +1,31 @@
-// panggil hasil rekomendas
+// src/api/recommendations.js
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'http://localhost:5000/api';
 
-export const getPopularRecommendations = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/recommendations/popular`);
-    return response.data; 
-  } catch (error) {
-    throw error.response?.data || error.message;
-  }
+// Ambil rekomendasi populer untuk opsi rating awal
+export const getPopularRecommendations = async (limit = 20) => {
+  const res = await axios.get(`${API_BASE_URL}/recommendations/popular?limit=${limit}`);
+  return res.data.destinations;
 };
 
-export const getPersonalizedRecommendations = async (userId, preferences) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/recommendations/personalized`, {
-      userId,
-      preferences 
-    }, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    });
-    return response.data;
-  } catch (error) {
-    throw error.response?.data || error.message;
-  }
+// Submit initial ratings array of { place_id, rating }
+export const submitInitialRatings = async (ratings) => {
+  const token = localStorage.getItem('token');
+  const res = await axios.post(
+    `${API_BASE_URL}/initial-ratings`,
+    ratings,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return res.data;
+};
+
+// Get hybrid recommendations
+export const getRecommendations = async () => {
+  const token = localStorage.getItem('token');
+  const res = await axios.get(
+    `${API_BASE_URL}/recommendations`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return res.data.destinations;
 };
