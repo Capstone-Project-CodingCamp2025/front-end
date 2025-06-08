@@ -23,7 +23,7 @@ export const submitRating = async (placeId, rating, review, userName) => {
 
 export const getRatingsForPlace = async (placeId) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/places/${placeId}/ratings`);
+    const response = await axios.get(`${API_BASE_URL}/places/${placeId}/details`);
     return response.data;
   } catch (error) {
     throw error.response?.data || error.message;
