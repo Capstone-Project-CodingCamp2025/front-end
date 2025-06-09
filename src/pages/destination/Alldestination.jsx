@@ -33,23 +33,24 @@ const AnimatedDestinationCard = ({ destination, index, onCardClick, isRecommende
               </span>
             </div>
           )}
+          {/* <pre>{JSON.stringify(destination, null, 2)}</pre> */}
           <img
-            src={destination.image || destination.thumbnail}
-            alt={destination.name}
+            src={destination.gambar || destination.thumbnail || destination.image}
+            alt={destination.name || destination.nama_tempat}
             className="object-cover w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
           />
         </div>
         <div className="p-5">
           <div className="flex items-center justify-between mb-1">
-            <h3 className="text-lg font-semibold text-gray-800 truncate">{destination.name}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 truncate">{destination.name || destination.nama_tempat}</h3>
             {destination.rating && (
               <span className="flex items-center px-2.5 py-0.5 text-xs font-semibold text-yellow-800 bg-yellow-200 rounded-full">
                 ⭐ {destination.rating}
               </span>
             )}
           </div>
-          {destination.location && (
-            <p className="mb-2 text-sm text-gray-500">{destination.location}</p>
+          {destination.location || destination.alamat && (
+            <p className="mb-2 text-sm text-gray-500">{destination.location || destination.alamat}</p>
           )}
           {destination.price && (
             <p className="text-base font-bold text-blue-600">{destination.price}</p>

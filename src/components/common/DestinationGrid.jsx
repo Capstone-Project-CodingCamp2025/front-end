@@ -63,7 +63,7 @@ export default function DestinationGrid() {
                 >
                   <div className="h-56 overflow-hidden">
                     <img
-                      src={destination.image || 'https://via.placeholder.com/300x200?text=No+Image'}
+                      src={destination.image}
                       alt={destination.name}
                       className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                     />
