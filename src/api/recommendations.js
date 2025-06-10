@@ -9,17 +9,6 @@ export const getPopularRecommendations = async (limit = 20) => {
   return res.data.destinations;
 };
 
-// Submit initial ratings array of { place_id, rating }
-export const submitInitialRatings = async (ratings) => {
-  const token = localStorage.getItem('token');
-  const res = await axios.post(
-    `${API_BASE_URL}/initial-ratings`,
-    ratings,
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  return res.data;
-};
-
 // Get hybrid recommendations
 export const getRecommendations = async () => {
   const token = localStorage.getItem('token');

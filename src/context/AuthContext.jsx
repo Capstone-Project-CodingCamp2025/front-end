@@ -98,24 +98,38 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = async () => {
-    try {
-      await apiLogout(); 
-    } catch (error) {
-      console.error("API Logout error:", error);
-    }
-    localStorage.removeItem('token');
+  // AuthContext.js - Perbaiki logout function
+  const logout = () => {
+    console.log('=== LOGOUT PROCESS ===');
+    console.log('Current user before logout:', user);
+    console.log('Current token before logout:', token ? `${token.substring(0, 20)}...` : 'null');
+    
+    // Clear all auth data
     setUser(null);
     setToken(null);
     setIsAuthenticated(false);
-    Swal.fire({
-    title: 'Logout',
-    text: 'Anda telah berhasil logout.',
-    icon: 'info',
-    timer: 2000,
-    showConfirmButton: false
-  });
-    navigate('/'); 
+    
+    // Clear localStorage
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userInfo');
+    
+    // Clear any other auth-related localStorage items
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && (key.includes('auth') || key.includes('token') || key.includes('user'))) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+    
+    console.log('✅ Logout completed');
+    console.log('User after logout:', null);
+    console.log('Token after logout:', null);
+    
+    // Optional: Redirect to login or home
+    // navigate('/login');
   };
 
   return (

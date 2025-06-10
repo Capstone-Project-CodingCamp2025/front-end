@@ -192,7 +192,7 @@ import { useState,} from 'react';
               <span className="font-semibold">Lokasi:</span> {destination.location}
             </p>
             <p className="mb-4 text-base md:text-lg">{destination.description || 'Deskripsi destinasi belum tersedia.'}</p>
-            <p className="text-lg font-bold text-blue-700 md:text-xl">{destination.price}</p>
+            <p className="text-lg font-bold rounded-lg text-blue-500 md:text-xl">{destination.kategori || destination.category}</p>
           </div>
         </div>
       </div>

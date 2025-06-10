@@ -51,8 +51,8 @@ const AnimatedDestinationCard = ({ destination, index, onCardClick, isRecommende
           {destination.location || destination.alamat && (
             <p className="mb-2 text-sm text-gray-500">{destination.location || destination.alamat}</p>
           )}
-          {destination.price && (
-            <p className="text-base font-bold text-blue-600">{destination.price}</p>
+          {destination.kategori || destination.category && (
+            <p className="text-base font-bold text-blue-600">{destination.kategori || destination.category}</p>
           )}
         </div>
       </Link>

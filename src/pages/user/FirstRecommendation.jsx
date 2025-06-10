@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   getPopularRecommendations,
-  submitInitialRatings,
   getRecommendations,
 } from '../../api/recommendations';
+import {submitInitialRatings} from '../../api/ratings'
 
 export default function FirstRecommendation() {
   const navigate = useNavigate();

@@ -79,8 +79,8 @@ export default function DestinationGrid() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">{destination.location}</p>
-                      {destination.price && (
-                        <p className="mt-1 font-bold text-gray-900">{destination.price}</p>
+                      {destination.kategori || destination.category && (
+                        <p className="mt-1 font-bold text-gray-900">{destination.kategori || destination.category}</p>
                       )}
                     </div>
                   </div>

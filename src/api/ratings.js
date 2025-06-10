@@ -21,15 +21,6 @@ export const submitRating = async (placeId, rating, review, userName) => {
       throw new Error('Token autentikasi tidak ditemukan. Silakan login kembali.');
     }
     
-    // Test koneksi ke server terlebih dahulu
-    try {
-      await axios.get(`${API_BASE_URL}/places/${placeId}/details`);
-      console.log('✅ Server connection OK');
-    } catch (connectionError) {
-      console.error('❌ Server connection failed:', connectionError);
-      throw new Error('Tidak dapat terhubung ke server. Pastikan server backend berjalan di http://localhost:5000');
-    }
-    
     const response = await axios.post(
       `${API_BASE_URL}/places/${placeId}/ratings`,
       {
@@ -52,7 +43,6 @@ export const submitRating = async (placeId, rating, review, userName) => {
     console.error('❌ Error submitting rating:', error);
     
     if (error.response) {
-      // Server responded with error status
       const errorMessage = error.response.data?.message || error.response.data?.error || 'Gagal mengirim ulasan';
       console.log('Server error response:', {
         status: error.response.status,
@@ -60,7 +50,6 @@ export const submitRating = async (placeId, rating, review, userName) => {
       });
       throw new Error(errorMessage);
     } else if (error.request) {
-      // Request made but no response
       console.log('Network error details:', {
         request: error.request,
         code: error.code,
@@ -68,33 +57,38 @@ export const submitRating = async (placeId, rating, review, userName) => {
       });
       throw new Error('Tidak dapat terhubung ke server. Periksa apakah server backend berjalan di http://localhost:5000');
     } else {
-      // Other error
       throw new Error(error.message || 'Terjadi kesalahan saat mengirim ulasan');
     }
   }
 };
 
-// Get semua reviews untuk tempat tertentu
+// Submit initial ratings array of { place_id, rating }
+export const submitInitialRatings = async (ratings) => {
+  const token = localStorage.getItem('token');
+  const res = await axios.post(
+    `${API_BASE_URL}/initial-ratings`,
+    ratings,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return res.data;
+};
+
+// Get semua reviews untuk tempat tertentu - FIXED
 export const getRatingsForPlace = async (placeId) => {
   console.log('=== GET RATINGS FOR PLACE API CALL ===');
   console.log('Place ID:', placeId);
   
   try {
-    // Test dengan endpoint /details terlebih dahulu
-    let response;
-    try {
-      response = await axios.get(`${API_BASE_URL}/places/${placeId}/details`, {
-        withCredentials: true
-      });
-    } catch (detailsError) {
-      console.log('Details endpoint failed, trying reviews endpoint');
-      response = await axios.get(`${API_BASE_URL}/places/${placeId}/reviews`, {
-        withCredentials: true
-      });
-    }
+    // Langsung gunakan endpoint reviews yang benar
+    const response = await axios.get(`${API_BASE_URL}/places/${placeId}/reviews`, {
+      withCredentials: true
+    });
     
     console.log('✅ Reviews retrieved successfully:', response.data.length, 'reviews');
-    return response.data; // Langsung return array reviews
+    console.log('Sample reviews:', response.data.slice(0, 2));
+    
+    // Pastikan return array
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error('❌ Error getting ratings for place:', error);
     
@@ -108,7 +102,9 @@ export const getRatingsForPlace = async (placeId) => {
       return [];
     }
     
-    throw new Error(error.response?.data?.message || 'Gagal mengambil ulasan');
+    // Jangan throw error, return empty array agar UI tidak crash
+    console.log('Returning empty array due to error');
+    return [];
   }
 };
 
@@ -155,9 +151,9 @@ export const getUserReviews = async () => {
 };
 
 // Delete review
-export const deleteReview = async (reviewId) => {
+export const deleteReview = async (placeId) => {
   console.log('=== DELETE REVIEW API CALL ===');
-  console.log('Review ID:', reviewId);
+  console.log('Place ID:', placeId);
   
   try {
     const token = getAuthToken();
@@ -166,7 +162,7 @@ export const deleteReview = async (reviewId) => {
       throw new Error('Token autentikasi tidak ditemukan. Silakan login kembali.');
     }
     
-    const response = await axios.delete(`${API_BASE_URL}/reviews/${reviewId}`, {
+    const response = await axios.delete(`${API_BASE_URL}/reviews/place/${placeId}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       },
