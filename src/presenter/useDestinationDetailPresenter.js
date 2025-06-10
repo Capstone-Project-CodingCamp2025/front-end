@@ -15,7 +15,7 @@ export function useDestinationDetailPresenter() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState([]); // Pastikan selalu array
   const [reviewForm, setReviewForm] = useState({ name: '', review: '', rating: 0 });
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
@@ -31,7 +31,10 @@ export function useDestinationDetailPresenter() {
         getRatingsForPlace(placeId)
       ]);
       setDestination(destinationData);
-      setReviews(reviewsData || []);
+      
+      // Pastikan reviewsData adalah array
+      const reviewsArray = Array.isArray(reviewsData) ? reviewsData : [];
+      setReviews(reviewsArray);
 
       // Cek bookmark
       const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]");
@@ -45,6 +48,8 @@ export function useDestinationDetailPresenter() {
     } catch (err) {
       console.error("Presenter: Error fetching destination details or reviews:", err);
       setError("Gagal memuat detail destinasi atau ulasan.");
+      // Set reviews ke array kosong jika error
+      setReviews([]);
     } finally {
       setIsLoading(false);
     }
@@ -146,10 +151,25 @@ export function useDestinationDetailPresenter() {
         review: reviewForm.review,
         userName: reviewForm.name 
       };
+      
+      console.log('Submitting review:', newReviewData);
       const submittedReview = await apiSubmitRating(placeId, newReviewData.rating, newReviewData.review, newReviewData.userName);
-      setReviews(prevReviews => [...prevReviews, submittedReview]);
+      console.log('Review submitted successfully:', submittedReview);
+      
+      // Pastikan prevReviews adalah array sebelum spread
+      setReviews(prevReviews => {
+        const currentReviews = Array.isArray(prevReviews) ? prevReviews : [];
+        return [...currentReviews, submittedReview];
+      });
+      
       Swal.fire('Sukses!', 'Ulasan berhasil dikirim!', 'success');
       setReviewForm({ name: isAuthenticated && user ? (user.name || user.username || '') : '', review: '', rating: 0 });
+      
+      // Refresh reviews setelah submit
+      setTimeout(() => {
+        fetchDetailsAndReviews();
+      }, 1000);
+      
     } catch (err) {
       console.error('Presenter: Failed to submit review:', err);
       Swal.fire('Gagal!', err.message || 'Gagal mengirim ulasan.', 'error');

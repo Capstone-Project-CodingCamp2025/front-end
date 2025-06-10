@@ -150,8 +150,6 @@ import { useState,} from 'react';
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <pre>{JSON.stringify(destination.image)}</pre>
-
           <img
             src={destination.image}
             alt={destination.name}

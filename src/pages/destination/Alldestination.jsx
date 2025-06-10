@@ -33,7 +33,6 @@ const AnimatedDestinationCard = ({ destination, index, onCardClick, isRecommende
               </span>
             </div>
           )}
-          {/* <pre>{JSON.stringify(destination, null, 2)}</pre> */}
           <img
             src={destination.gambar || destination.thumbnail || destination.image}
             alt={destination.name || destination.nama_tempat}
