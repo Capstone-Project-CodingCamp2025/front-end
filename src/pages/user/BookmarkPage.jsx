@@ -21,7 +21,7 @@ const BookmarkPage = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 mt-16 md:mt-24">
+    <div className="max-w-6xl mx-auto px-4 py-8">
       {/* Header Section */}
       <div className="text-center mb-8">
         <div className="flex items-center justify-center mb-4">
@@ -40,28 +40,6 @@ const BookmarkPage = () => {
           Daftar destinasi yang telah Anda simpan untuk dikunjungi nanti.
         </p>
       </div>
-
-      {/* Debug Info - Hapus ini setelah masalah teratasi */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mb-4 p-4 bg-gray-100 rounded-lg text-sm">
-          <p><strong>Debug Info:</strong></p>
-          <p>Total bookmarks: {bookmarks.length}</p>
-          {bookmarks.length > 0 && (
-            <div className="mt-2">
-              <p><strong>Sample bookmark data:</strong></p>
-              <pre className="text-xs overflow-x-auto">
-                {JSON.stringify({
-                  id: bookmarks[0].id,
-                  name: bookmarks[0].name,
-                  location: bookmarks[0].location,
-                  place_id: bookmarks[0].place_id,
-                  bookmark_id: bookmarks[0].bookmark_id
-                }, null, 2)}
-              </pre>
-            </div>
-          )}
-        </div>
-      )}
 
       {/* Content Section */}
       {bookmarks.length === 0 ? (
@@ -130,8 +108,11 @@ const BookmarkPage = () => {
               const destinationLocation = destination.location || 
                                         destination.alamat || 
                                         'Lokasi tidak tersedia';
-              const destinationRating = destination.rating || null;
-              const destinationPrice = destination.price || null;
+              const rawRating = destination.rating;
+              const destinationRating = 
+                rawRating !== null && rawRating !== undefined && !isNaN(rawRating)
+                  ? parseFloat(rawRating).toFixed(1)
+                  : null;
               const destinationCategory = destination.kategori || 
                                         destination.category || null;
 
@@ -164,10 +145,6 @@ const BookmarkPage = () => {
                         src={destinationImage}
                         alt={destinationName}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                        onError={(e) => {
-                          console.log('🖼️ Image load error for:', destinationImage);
-                          e.target.src = '/api/placeholder/400/300';
-                        }}
                       />
                     </div>
                     
@@ -224,17 +201,6 @@ const BookmarkPage = () => {
                         </span>
                       </div>
 
-                      {destinationPrice && (
-                        <div className="flex items-center text-green-600">
-                          <svg className="w-4 h-4 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                          </svg>
-                          <span className="text-sm font-semibold">
-                            {destinationPrice}
-                          </span>
-                        </div>
-                      )}
-
                       {destinationCategory && (
                         <div className="flex items-center">
                           <svg className="w-4 h-4 mr-2 shrink-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -246,18 +212,6 @@ const BookmarkPage = () => {
                         </div>
                       )}
                     </div>
-
-                    {/* Debug info per item - Hapus setelah masalah teratasi */}
-                    {process.env.NODE_ENV === 'development' && (
-                      <div className="mt-3 p-2 bg-gray-50 rounded text-xs">
-                        <p><strong>Debug:</strong></p>
-                        <p>ID: {destinationId}</p>
-                        <p>Place ID: {destination.place_id}</p>
-                        <p>Bookmark ID: {destination.bookmark_id}</p>
-                        <p>Name: {destinationName}</p>
-                        <p>Location: {destinationLocation}</p>
-                      </div>
-                    )}
                   </div>
 
                   {/* Remove Bookmark Button */}
