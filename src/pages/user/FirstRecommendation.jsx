@@ -21,7 +21,7 @@ export default function FirstRecommendation() {
 
   useEffect(() => {
     async function checkRecommendations() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       if (token) {
         try {
           const recs = await getRecommendations();
@@ -76,11 +76,14 @@ export default function FirstRecommendation() {
     setDebugInfo('Menyimpan ratings...');
 
     try {
+      console.log('Submitting ratings:', entries);
       await submitInitialRatings(entries);
       setSuccess(true);
       setDebugInfo('Ratings berhasil disimpan!');
 
+      // FIXED: Tambahkan delay lebih lama untuk memastikan data tersimpan
       setTimeout(() => {
+        console.log('Redirecting to destination page...');
         navigate('/destination', {
           state: {
             message: 'Rating berhasil disimpan! Lihat rekomendasi personalmu.',
@@ -89,6 +92,7 @@ export default function FirstRecommendation() {
         });
       }, 2500);
     } catch (err) {
+      console.error('Error submitting ratings:', err);
       setError(err.response?.data?.message || 'Gagal menyimpan rating.');
       setDebugInfo(JSON.stringify(err.response?.data) || err.message);
     } finally {

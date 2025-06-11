@@ -24,6 +24,8 @@ import BookmarkPage from './pages/user/BookmarkPage';
 import ExploreMore from './pages/destination/ExploreMore';
 import Contact from './pages/Contact';
 import FirstRecommendation from './pages/user/FirstRecommendation';
+import GoogleAuthSuccess from './components/GoogleAuthSuccess';
+import GoogleAuthError from './components/GoogleAuthError';
 // import NotFoundPage from './pages/NotFoundPage'; // Jika Ada halaman 404
 
 
@@ -140,6 +142,8 @@ const AppRoutes = () => {
       {/* Rute yang menggunakan AuthLayout */}
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<Login />} />
+        <Route path="/auth/google/success" element={<GoogleAuthSuccess />} />
+        <Route path="/auth/google/error" element={<GoogleAuthError />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/otp-reset" element={<OtpReset />} />

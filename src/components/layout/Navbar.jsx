@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom'; 
+import { useState, useEffect } from 'react';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'; 
 import { useAuth } from '../../context/AuthContext';
-
+import Swal from 'sweetalert2';
 
 const Logo = () => (
   <Link to="/" className="flex items-center flex-shrink-0">
@@ -19,13 +19,51 @@ const Logo = () => (
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth(); // Gunakan context
-  console.log("Navbar: isAuthenticated:", isAuthenticated, "User:", user);
+  const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
+  // Debug logging
+  console.log("Navbar: isAuthenticated:", isAuthenticated, "User:", user);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  // FIXED: Enhanced logout handler with loading state
   const handleLogout = async () => {
-    await logout();
-    setIsOpen(false); 
+    try {
+      setIsOpen(false); // Close mobile menu immediately
+      
+      // Show loading state
+      const loadingSwal = Swal.fire({
+        title: 'Logging out...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      await logout();
+      
+      // Close loading and show success
+      loadingSwal.close();
+      Swal.fire({
+        icon: 'success',
+        title: 'Logout berhasil!',
+        timer: 1000,
+        showConfirmButton: false
+      });
+      
+    } catch (error) {
+      console.error('Logout error:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal logout',
+        text: 'Terjadi kesalahan saat logout'
+      });
+    }
   };
 
   const navLinks = [
@@ -58,10 +96,10 @@ export default function Navbar() {
                 {link.name}
               </NavLink>
             ))}
-            {isAuthenticated && ( // Tampilkan link Bookmark jika sudah login
+            {isAuthenticated && (
               <NavLink
                 key="Bookmark"
-                to="/bookmark" // Rute ke halaman bookmark
+                to="/bookmark"
                 className={({ isActive }) =>
                   `${baseLinkClasses} ${isActive ? activeLinkClasses : inactiveLinkClasses}`
                 }
@@ -72,7 +110,7 @@ export default function Navbar() {
           </div>
 
           {/* Auth Buttons - Desktop */}
-          <div className="items-center hidden ml-4 space-x-2 md:flex"> {/* */}
+          <div className="items-center hidden ml-4 space-x-2 md:flex">
             {isAuthenticated ? (
               <>
                 <NavLink
@@ -83,7 +121,7 @@ export default function Navbar() {
                 </NavLink>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-orange-500 rounded-md hover:bg-orange-600"
+                  className="px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-orange-500 rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300"
                 >
                   Logout
                 </button>
@@ -107,8 +145,8 @@ export default function Navbar() {
           </div>
           
           {/* Mobile Hamburger Button */}
-          <div className="flex items-center md:hidden"> {/* */}
-             {!isAuthenticated && ( // Tampilkan tombol Masuk jika belum login
+          <div className="flex items-center md:hidden">
+             {!isAuthenticated && (
                  <Link
                   to="/login"
                   className="px-3 py-2 mr-2 text-sm font-medium text-white rounded-md hover:bg-blue-700"
@@ -159,7 +197,7 @@ export default function Navbar() {
               {link.name}
             </NavLink>
           ))}
-          {isAuthenticated && ( // Tampilkan link Bookmark mobile jika sudah login
+          {isAuthenticated && (
             <NavLink
                 key="Bookmark-mobile"
                 to="/bookmark"
@@ -186,7 +224,7 @@ export default function Navbar() {
               </NavLink>
               <button
                 onClick={handleLogout}
-                className="block w-full px-3 py-2 mt-1 text-base font-medium text-left text-blue-100 rounded-md hover:bg-orange-500 hover:text-white"
+                className="block w-full px-3 py-2 mt-1 text-base font-medium text-left text-blue-100 rounded-md hover:bg-orange-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-orange-300"
               >
                 Logout
               </button>

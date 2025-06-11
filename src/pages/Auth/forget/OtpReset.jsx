@@ -8,12 +8,22 @@ export default function OtpReset() {
     isLoading,
     email,
     handleVerifyOtp,
-    // handleResendOtp,
+    handleResendOtp,
+    isResendingOtp,
+    countdown,
   } = useOtpResetPresenter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await handleVerifyOtp();
+  };
+
+  const handleOtpChange = (e) => {
+    const value = e.target.value;
+    // Only allow numbers and limit to 6 digits
+    if (/^\d*$/.test(value) && value.length <= 6) {
+      setOtp(value);
+    }
   };
 
   return (
@@ -40,32 +50,43 @@ export default function OtpReset() {
                   placeholder="------"
                   className="w-full px-4 py-3 text-lg tracking-widest text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
+                  onChange={handleOtpChange}
                   required
                 />
               </div>
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || otp.length !== 6}
                 className={`w-full py-3 mt-3 font-semibold text-white transition-all duration-300 transform rounded-lg ${
-                  isLoading
+                  isLoading || otp.length !== 6
                     ? 'bg-gray-400 cursor-not-allowed'
                     : 'bg-blue-600 hover:bg-blue-700 hover:scale-105'
                 } focus:outline-none focus:ring-2 focus:ring-blue-500`}
               >
                 {isLoading ? 'Memverifikasi...' : 'Verifikasi OTP'}
               </button>
+              
               <div className="mt-4 text-sm text-center text-gray-600">
                 Tidak menerima kode?{' '}
                 <button 
                   type="button" 
-                  // onClick={handleResendOtp} // fungsi resend
-                  className="font-semibold text-blue-600 hover:underline disabled:text-gray-400"
-                  // disabled={isResendingOtp}
+                  onClick={handleResendOtp}
+                  className={`font-semibold transition-colors ${
+                    countdown > 0 || isResendingOtp
+                      ? 'text-gray-400 cursor-not-allowed'
+                      : 'text-blue-600 hover:underline hover:text-blue-700'
+                  }`}
+                  disabled={countdown > 0 || isResendingOtp}
                 >
-                  Kirim Ulang
+                  {isResendingOtp 
+                    ? 'Mengirim...' 
+                    : countdown > 0 
+                      ? `Kirim Ulang (${countdown}s)` 
+                      : 'Kirim Ulang'
+                  }
                 </button>
               </div>
+              
               <div className="mt-2 text-sm text-center">
                 Kembali ke{' '}
                 <Link to="/login" className="font-semibold text-blue-600 hover:underline">

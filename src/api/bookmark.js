@@ -2,8 +2,9 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
-// Helper untuk get auth header - DIPERBAIKI
+// FIXED: Helper untuk get auth header with consistent token key
 const getAuthHeader = () => {
+  // FIXED: Use consistent token key 'authToken'
   const token = localStorage.getItem('authToken');
   console.log('🔑 Token from localStorage:', token ? `${token.substring(0, 20)}...` : 'null');
   
@@ -78,7 +79,14 @@ export const getUserBookmarks = async () => {
       { headers }
     );
     
-    console.log('✅ Bookmarks loaded successfully:', response.data.data?.length || 0);
+    console.log('✅ Raw bookmarks response:', response.data);
+    console.log('📊 Bookmarks data structure:', {
+      hasData: !!response.data.data,
+      isArray: Array.isArray(response.data.data),
+      length: response.data.data?.length || 0,
+      sample: response.data.data?.[0] || null
+    });
+    
     return response.data;
   } catch (error) {
     console.error('❌ Get bookmarks error:', error.response?.data || error.message);

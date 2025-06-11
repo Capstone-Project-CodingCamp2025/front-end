@@ -188,11 +188,27 @@ import { useState,} from 'react';
                 </button>
               </h1>
             </div>
-            <p className="mb-2 text-base md:text-lg">
-              <span className="font-semibold">Lokasi:</span> {destination.location}
-            </p>
-            <p className="mb-4 text-base md:text-lg">{destination.description || 'Deskripsi destinasi belum tersedia.'}</p>
-            <p className="text-lg font-bold rounded-lg text-blue-500 md:text-xl">{destination.kategori || destination.category}</p>
+            <div className="mb-4 flex items-start text-base md:text-lg">
+              <svg className="w-4 h-4 mr-2 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span className="font-semibold line-clamp-2">{destination.location}</span> 
+            </div>
+
+            <div className="mb-4 flex items-start text-base md:text-lg">
+              <svg className="w-4 h-4 mr-2 mt-1 shrink-0 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+              </svg>
+              <p className="text-base text-gray-700">{destination.description || destination.deskripsi || 'Deskripsi destinasi belum tersedia.'}</p>
+            </div>
+
+            <div className="flex items-center text-sm text-blue-600 font-medium">
+              <svg className="w-4 h-4 mr-2 shrink-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+              </svg>
+              <span>{destination.kategori || destination.category}</span>
+            </div>
           </div>
         </div>
       </div>

@@ -1,5 +1,7 @@
+// src/components/Register.jsx - Updated with Google OAuth support
 import { Link } from 'react-router-dom';
 import { useRegisterPresenter } from '../../presenter/useRegisterPresenter';
+import GoogleRegister from '../../components/GoogleRegister';
 
 export default function Register() {
   const {
@@ -10,7 +12,9 @@ export default function Register() {
     password,
     setPassword,
     isLoading,
+    isGoogleLoading,
     handleRegister,
+    setIsGoogleLoading,
   } = useRegisterPresenter();
 
   const handleSubmit = async (e) => {
@@ -18,7 +22,7 @@ export default function Register() {
     await handleRegister();
   };
 
-return (
+  return (
     <main className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <div className="flex flex-col w-full max-w-4xl overflow-hidden bg-white shadow-2xl md:flex-row rounded-2xl">
         <div className="relative hidden w-full md:w-1/2 md:block">
@@ -77,6 +81,7 @@ return (
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
             <div>
@@ -94,6 +99,7 @@ return (
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
             <div>
@@ -111,15 +117,36 @@ return (
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
             <button
               type="submit"
-              disabled={isLoading}
-              className="w-full py-3 mt-3 font-semibold text-white transition-all duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 hover:scale-105 disabled:bg-gray-400"
+              disabled={isLoading || isGoogleLoading}
+              className={`w-full py-3 mt-3 font-semibold text-white transition-all duration-300 transform rounded-lg ${
+                isLoading || isGoogleLoading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 hover:scale-105'
+              } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50`}
             >
-              {isLoading ? 'Loading...' : 'Register'}
+              {isLoading ? 'Sedang Daftar...' : isGoogleLoading ? 'Memproses...' : 'Register'}
             </button>
+
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">atau daftar dengan google</span>
+              </div>
+            </div>
+
+            {/* Google Register Button */}
+            <div>
+              <GoogleRegister onLoading={setIsGoogleLoading} />
+            </div>
+
             <div className="mt-4 text-sm text-center text-gray-600">
               Sudah punya akun?{' '}
               <Link
