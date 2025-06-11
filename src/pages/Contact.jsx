@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
+// Contact.jsx - Updated dengan integrasi useContactPresenter
+import { useState, useEffect } from 'react';
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import useContactPresenter from '../presenter/useContactPresenter';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +10,14 @@ const Contact = () => {
     subjek: '',
     pesan: ''
   });
-  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const { 
+    loading, 
+    error, 
+    success, 
+    sendContact, 
+    resetState 
+  } = useContactPresenter();
 
   const handleChange = (e) => {
     setFormData({
@@ -17,14 +26,26 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ nama: '', email: '', subjek: '', pesan: '' });
-    }, 3000);
+    
+    const result = await sendContact(formData);
+    
+    if (result.success) {
+      // Reset form setelah berhasil
+      setTimeout(() => {
+        setFormData({ nama: '', email: '', subjek: '', pesan: '' });
+        resetState();
+      }, 3000);
+    }
   };
+
+  // Reset error ketika user mulai mengetik
+  useEffect(() => {
+    if (error && (formData.nama || formData.email || formData.subjek || formData.pesan)) {
+      resetState();
+    }
+  }, [formData, error, resetState]);
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-white py-20">
@@ -53,7 +74,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <p className="text-gray-500 text-sm">Email</p>
-                      <p className="text-gray-800 font-medium">support@siresita.id</p>
+                      <p className="text-gray-800 font-medium">siresitadbs@gmail.com</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4 group">
@@ -103,7 +124,7 @@ const Contact = () => {
 
             {/* Form Kontak */}
             <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100">
-              {isSubmitted ? (
+              {success ? (
                 <div className="text-center py-12">
                   <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
                     <CheckCircle className="w-8 h-8 text-white" />
@@ -112,11 +133,22 @@ const Contact = () => {
                   <p className="text-gray-600">Terima kasih atas pesan Anda. Kami akan segera merespon.</p>
                 </div>
               ) : (
-                <div className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Error Alert */}
+                  {error && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center space-x-3">
+                      <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                      <div className="text-red-700 text-sm">
+                        <p className="font-medium">Terjadi kesalahan:</p>
+                        <p>{error}</p>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="nama" className="block text-sm font-medium text-gray-700 mb-2">
-                        Nama Anda
+                        Nama Anda *
                       </label>
                       <input
                         type="text"
@@ -124,14 +156,15 @@ const Contact = () => {
                         name="nama"
                         value={formData.nama}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        disabled={loading}
+                        className="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="Nama Anda"
                         required
                       />
                     </div>
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                        Alamat Email
+                        Alamat Email *
                       </label>
                       <input
                         type="email"
@@ -139,7 +172,8 @@ const Contact = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+                        disabled={loading}
+                        className="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="email@contoh.com"
                         required
                       />
@@ -147,43 +181,54 @@ const Contact = () => {
                   </div>
                   <div>
                     <label htmlFor="subjek" className="block text-sm font-medium text-gray-700 mb-2">
-                      Subjek
+                      Subjek *
                     </label>
                     <input
                       type="text"
                       id="subjek"
-                        name="subjek"
-                        value={formData.subjek}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
-                        placeholder="Masukan subjek pesan"
-                        required
-                      />
+                      name="subjek"
+                      value={formData.subjek}
+                      onChange={handleChange}
+                      disabled={loading}
+                      className="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                      placeholder="Masukan subjek pesan"
+                      required
+                    />
                   </div>
                   <div>
                     <label htmlFor="pesan" className="block text-sm font-medium text-gray-700 mb-2">
-                      Pesan
+                      Pesan *
                     </label>
                     <textarea
                       id="pesan"
                       name="pesan"
                       value={formData.pesan}
                       onChange={handleChange}
+                      disabled={loading}
                       rows={6}
-                      className="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 resize-none"
+                      className="w-full px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder="Tulis pesan atau ide Anda untuk SIRESITA!"
                       required
                     ></textarea>
                   </div>
                   <button
-                    type="button"
-                    onClick={handleSubmit}
-                    className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 px-6 rounded-lg font-medium hover:from-blue-600 hover:to-cyan-600 transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center space-x-2 group"
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 px-6 rounded-lg font-medium hover:from-blue-600 hover:to-cyan-600 transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center space-x-2 group disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   >
-                    <span>Kirim Pesan</span>
-                    <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Mengirim...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Kirim Pesan</span>
+                        <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                      </>
+                    )}
                   </button>
-                </div>
+                </form>
               )}
             </div>
           </div>
