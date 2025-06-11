@@ -7,7 +7,7 @@ axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 // Get auth token from localStorage
-const getAuthToken = () => localStorage.getItem('token') || localStorage.getItem('authToken');
+const getAuthToken = () => localStorage.getItem('authToken');
 
 // Submit review/rating untuk tempat tertentu
 export const submitRating = async (placeId, rating, review, userName) => {
@@ -64,7 +64,7 @@ export const submitRating = async (placeId, rating, review, userName) => {
 
 // Submit initial ratings array of { place_id, rating }
 export const submitInitialRatings = async (ratings) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('authToken');
   const res = await axios.post(
     `${API_BASE_URL}/initial-ratings`,
     ratings,
@@ -105,22 +105,6 @@ export const getRatingsForPlace = async (placeId) => {
     // Jangan throw error, return empty array agar UI tidak crash
     console.log('Returning empty array due to error');
     return [];
-  }
-};
-
-// Test koneksi server
-export const testServerConnection = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/health`, {
-      timeout: 5000,
-      withCredentials: true
-    });
-    return { connected: true, message: 'Server connected' };
-  } catch (error) {
-    return { 
-      connected: false, 
-      message: `Server not reachable: ${error.message}` 
-    };
   }
 };
 

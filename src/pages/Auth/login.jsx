@@ -1,5 +1,7 @@
+// src/components/Login.jsx - Updated with Google OAuth support
 import { Link } from 'react-router-dom';
 import { useLoginPresenter } from '../../presenter/useLoginPresenter';
+import GoogleSignIn from '../../components/GoogleSignIn';
 
 export default function Login() {
   const {
@@ -8,7 +10,9 @@ export default function Login() {
     password,
     setPassword,
     isLoading,
+    isGoogleLoading,
     handleLogin,
+    setIsGoogleLoading,
   } = useLoginPresenter();
 
   const handleSubmit = async (e) => {
@@ -20,7 +24,7 @@ export default function Login() {
     <main className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <div className="flex flex-col w-full max-w-4xl overflow-hidden bg-white shadow-2xl md:flex-row rounded-2xl">
         <div className="flex flex-col justify-center w-full p-8 md:w-1/2 lg:p-12">
-          {/* (Tombol kembali) */}
+          {/* Tombol kembali */}
            <div className="mb-6 md:mb-8">
             <Link
               to="/"
@@ -74,6 +78,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
             <div>
@@ -99,20 +104,37 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
             <button
               type="submit"
-              disabled={isLoading} 
+              disabled={isLoading || isGoogleLoading} 
               className={`w-full py-3 mt-3 font-semibold text-white transition-all duration-300 transform rounded-lg ${
-                isLoading
+                isLoading || isGoogleLoading
                   ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-blue-600 hover:bg-blue-700 hover:scale-105'
               } focus:outline-none focus:ring-2 focus:ring-blue-500`}
             >
-              {isLoading ? 'Loading...' : 'Log In'}
+              {isLoading ? 'Sedang Login...' : isGoogleLoading ? 'Memproses...' : 'Log In'}
             </button>
-            <div className="mt-4 text-sm text-center text-gray-600">
+
+          {/* Divider */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">atau masuk dengan google</span>
+            </div>
+          </div>
+
+          {/* Google Sign-In Button */}
+          <div>
+            <GoogleSignIn onLoading={setIsGoogleLoading} />
+          </div>
+
+            <div className="text-sm text-center text-gray-600">
               Belum punya akun?{' '}
               <Link
                 to="/register"

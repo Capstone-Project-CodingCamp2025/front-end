@@ -11,7 +11,7 @@ export const getPopularRecommendations = async (limit = 20) => {
 
 // Get hybrid recommendations
 export const getRecommendations = async () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('authToken');
   const res = await axios.get(
     `${API_BASE_URL}/recommendations`,
     { headers: { Authorization: `Bearer ${token}` } }

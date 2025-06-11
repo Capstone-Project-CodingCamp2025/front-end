@@ -110,7 +110,7 @@ export default function AllDestination() {
 
   // Load hybrid recommendations
   const loadHybridRecommendations = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('authToken');
     if (!token) {
       console.log('No token found, skipping hybrid recommendations');
       return;
