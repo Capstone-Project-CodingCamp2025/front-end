@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { useBookmarkPresenter } from '../../presenter/useBookmarkPresenter';
+import { useNavigate } from 'react-router-dom';
 
 const BookmarkPage = () => {
+  const navigate = useNavigate();
   const {
     bookmarks,
     isLoading,
@@ -65,7 +67,7 @@ const BookmarkPage = () => {
               Mulai jelajahi destinasi wisata dan simpan yang menarik untuk Anda!
             </p>
             <button
-              onClick={() => window.history.back()}
+              onClick={() => navigate('/destination')}
               className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
