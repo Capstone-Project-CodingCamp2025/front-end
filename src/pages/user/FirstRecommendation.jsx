@@ -212,13 +212,9 @@ export default function FirstRecommendation() {
             {[...Array(6)].map((_, i) => (
               <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                 <div className="animate-pulse">
-                  <div className="flex items-center space-x-4 mb-4">
-                    <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
-                    <div className="flex-1">
-                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                    </div>
-                  </div>
+                  <div className="w-full h-48 bg-gray-200 rounded-xl mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/2 mb-4"></div>
                   <div className="h-10 bg-gray-200 rounded-lg"></div>
                 </div>
               </div>
@@ -230,74 +226,89 @@ export default function FirstRecommendation() {
               {places.map(place => (
                 <div 
                   key={place.id} 
-                  className={`group bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-indigo-200 transition-all duration-300 cursor-pointer ${
+                  className={`group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:border-indigo-200 transition-all duration-300 cursor-pointer ${
                     ratings[place.id] ? 'ring-2 ring-indigo-500 bg-gradient-to-br from-indigo-50 to-purple-50' : ''
                   }`}
                   onMouseEnter={() => setHoveredPlace(place.id)}
                   onMouseLeave={() => setHoveredPlace(null)}
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center space-x-4 flex-1">
-                      <div className="w-12 h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300">
-                        {place.image ? (
-                          <img 
-                            src={place.gambar}
-                            alt={place.name}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                              e.target.nextSibling.style.display = 'flex';
-                            }}
-                          />
-                        ) : null}
-                        <div className="w-full h-full flex items-center justify-center text-2xl" style={{display: place.image ? 'none' : 'flex'}}>
-                          📍
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-bold text-gray-800 text-lg group-hover:text-indigo-600 transition-colors duration-300">
-                          {place.name}
-                        </h3>
-                        <div className="flex items-center space-x-2 text-gray-500 mt-1">
-                          <MapPin className="w-4 h-4" />
-                          <span className="text-sm">{place.location}</span>
-                        </div>
-                        {place.category && (
-                          <span className="inline-block px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full mt-2">
-                            {place.category}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-600">Rating Anda:</span>
-                      {ratings[place.id] && (
-                        <div className="flex items-center space-x-1">
-                          {[...Array(ratings[place.id])].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                          ))}
-                        </div>
-                      )}
+                  {/* Image Section */}
+                  <div className="relative w-full h-48 bg-gradient-to-br from-indigo-100 to-purple-100 overflow-hidden">
+                    {place.gambar ? (
+                      <img 
+                        src={place.gambar}
+                        alt={place.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div 
+                      className="absolute inset-0 flex items-center justify-center text-6xl" 
+                      style={{display: place.gambar ? 'none' : 'flex'}}
+                    >
+                      📍
                     </div>
                     
-                    <div className="flex space-x-2">
-                      {[1, 2, 3, 4, 5].map(value => (
-                        <button
-                          key={value}
-                          onClick={() => handleRating(place.id, value)}
-                          className={`flex-1 px-3 py-2 rounded-lg border-2 transition-all duration-200 font-medium text-sm ${
-                            ratings[place.id] === value
-                              ? 'border-indigo-500 bg-indigo-500 text-white shadow-lg scale-105'
-                              : 'border-gray-200 bg-white text-gray-600 hover:border-indigo-300 hover:bg-indigo-50'
-                          }`}
-                        >
-                          <Star className={`w-4 h-4 mx-auto ${ratings[place.id] === value ? 'fill-current' : ''}`} />
-                          <span className="block mt-1">{value}</span>
-                        </button>
-                      ))}
+                    {/* Overlay gradient for better text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    
+                    {/* Rating badge overlay */}
+                    {ratings[place.id] && (
+                      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
+                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                        <span className="font-bold text-gray-800">{ratings[place.id]}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="p-6">
+                    <div className="mb-4">
+                      <h3 className="font-bold text-gray-800 text-xl mb-2 group-hover:text-indigo-600 transition-colors duration-300">
+                        {place.name}
+                      </h3>
+                      <div className="flex items-center space-x-2 text-gray-500 mb-2">
+                        <MapPin className="w-4 h-4" />
+                        <span className="text-sm">{place.location}</span>
+                      </div>
+                      {place.category && (
+                        <span className="inline-block px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                          {place.category}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-600">Rating Anda:</span>
+                        {ratings[place.id] && (
+                          <div className="flex items-center space-x-1">
+                            {[...Array(ratings[place.id])].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex space-x-2">
+                        {[1, 2, 3, 4, 5].map(value => (
+                          <button
+                            key={value}
+                            onClick={() => handleRating(place.id, value)}
+                            className={`flex-1 px-3 py-2 rounded-lg border-2 transition-all duration-200 font-medium text-sm ${
+                              ratings[place.id] === value
+                                ? 'border-indigo-500 bg-indigo-500 text-white shadow-lg scale-105'
+                                : 'border-gray-200 bg-white text-gray-600 hover:border-indigo-300 hover:bg-indigo-50'
+                            }`}
+                          >
+                            <Star className={`w-4 h-4 mx-auto ${ratings[place.id] === value ? 'fill-current' : ''}`} />
+                            <span className="block mt-1">{value}</span>
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
