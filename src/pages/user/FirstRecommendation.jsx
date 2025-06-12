@@ -241,7 +241,7 @@ export default function FirstRecommendation() {
                       <div className="w-12 h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300">
                         {place.image ? (
                           <img 
-                            src={`http://localhost:5000/gambar_data/${place.image}`}
+                            src={place.gambar}
                             alt={place.name}
                             className="w-full h-full object-cover"
                             onError={(e) => {
