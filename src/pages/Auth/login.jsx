@@ -1,7 +1,8 @@
-// src/components/Login.jsx - Updated with Google OAuth support
+// src/components/Login.jsx - Updated with Google OAuth support and animations
 import { Link } from 'react-router-dom';
 import { useLoginPresenter } from '../../presenter/useLoginPresenter';
 import GoogleSignIn from '../../components/GoogleSignIn';
+import useIntersectionObserver from '../../Hook/useIntersectionObserver';
 
 export default function Login() {
   const {
@@ -15,17 +16,60 @@ export default function Login() {
     setIsGoogleLoading,
   } = useLoginPresenter();
 
+  // Intersection Observer hooks untuk animasi
+  const [containerRef, isContainerVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
+  const [backButtonRef, isBackButtonVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
+  const [headerRef, isHeaderVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
+  const [formRef, isFormVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
+  const [imageRef, isImageVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await handleLogin();
   };
 
+  // Animation classes
+  const baseTransition = 'transition-all duration-700 ease-out';
+  const initialStyle = 'opacity-0 translate-y-10';
+  const visibleStyle = 'opacity-100 translate-y-0';
+  const scaleInitial = 'opacity-0 scale-95';
+  const scaleVisible = 'opacity-100 scale-100';
+
  return (
     <main className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      <div className="flex flex-col w-full max-w-4xl overflow-hidden bg-white shadow-2xl md:flex-row rounded-2xl">
+      <div 
+        ref={containerRef}
+        className={`flex flex-col w-full max-w-4xl overflow-hidden bg-white shadow-2xl md:flex-row rounded-2xl ${baseTransition} ${
+          isContainerVisible ? scaleVisible : scaleInitial
+        }`}
+      >
         <div className="flex flex-col justify-center w-full p-8 md:w-1/2 lg:p-12">
-          {/* Tombol kembali */}
-           <div className="mb-6 md:mb-8">
+          {/* Tombol kembali dengan animasi */}
+           <div 
+             ref={backButtonRef}
+             className={`mb-6 md:mb-8 ${baseTransition} delay-100 ${
+               isBackButtonVisible ? visibleStyle : initialStyle
+             }`}
+           >
             <Link
               to="/"
               className="inline-flex items-center text-sm text-blue-600 transition-colors duration-200 hover:text-blue-800 group"
@@ -47,23 +91,50 @@ export default function Login() {
             </Link>
           </div>
 
-          <div className="mb-8 text-center md:text-left">
+          {/* Header dengan animasi */}
+          <div 
+            ref={headerRef}
+            className={`mb-8 text-center md:text-left ${baseTransition} delay-200 ${
+              isHeaderVisible ? visibleStyle : initialStyle
+            }`}
+          >
             <Link
               to="/"
-              className="inline-block mb-6 text-2xl font-bold text-blue-600"
+              className={`inline-block mb-6 text-2xl font-bold text-blue-600 ${baseTransition} delay-300 ${
+                isHeaderVisible ? visibleStyle : initialStyle
+              }`}
             >
               SIRESITA
             </Link>
-            <h1 className="text-3xl font-bold text-gray-800 md:text-4xl">
+            <h1 
+              className={`text-3xl font-bold text-gray-800 md:text-4xl ${baseTransition} delay-400 ${
+                isHeaderVisible ? visibleStyle : initialStyle
+              }`}
+            >
               Selamat Datang Kembali!
             </h1>
-            <p className="mt-2 text-gray-600">
+            <p 
+              className={`mt-2 text-gray-600 ${baseTransition} delay-500 ${
+                isHeaderVisible ? visibleStyle : initialStyle
+              }`}
+            >
               Masuk untuk melanjutkan petualangan wisatamu.
             </p>
           </div>
 
-          <form className="flex flex-col gap-y-5" onSubmit={handleSubmit}>
-            <div>
+          {/* Form dengan animasi */}
+          <form 
+            ref={formRef}
+            className={`flex flex-col gap-y-5 ${baseTransition} delay-300 ${
+              isFormVisible ? visibleStyle : initialStyle
+            }`} 
+            onSubmit={handleSubmit}
+          >
+            <div 
+              className={`${baseTransition} delay-400 ${
+                isFormVisible ? visibleStyle : initialStyle
+              }`}
+            >
               <label
                 htmlFor="email-login"
                 className="block mb-1 text-sm font-medium text-gray-700"
@@ -74,14 +145,19 @@ export default function Login() {
                 type="email"
                 id="email-login"
                 placeholder="kamu@contoh.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={isLoading || isGoogleLoading}
               />
             </div>
-            <div>
+            
+            <div 
+              className={`${baseTransition} delay-500 ${
+                isFormVisible ? visibleStyle : initialStyle
+              }`}
+            >
               <div className="flex items-center justify-between mb-1">
                 <label
                   htmlFor="password-login"
@@ -91,7 +167,7 @@ export default function Login() {
                 </label>
                 <Link
                   to="/forget-password"
-                  className="text-sm text-blue-600 hover:underline"
+                  className="text-sm text-blue-600 hover:underline transition-colors duration-200"
                 >
                   Lupa password?
                 </Link>
@@ -100,13 +176,14 @@ export default function Login() {
                 type="password"
                 id="password-login"
                 placeholder="••••••••"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isLoading || isGoogleLoading}
               />
             </div>
+            
             <button
               type="submit"
               disabled={isLoading || isGoogleLoading} 
@@ -114,13 +191,19 @@ export default function Login() {
                 isLoading || isGoogleLoading
                   ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-blue-600 hover:bg-blue-700 hover:scale-105'
-              } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              } focus:outline-none focus:ring-2 focus:ring-blue-500 ${baseTransition} delay-600 ${
+                isFormVisible ? visibleStyle : initialStyle
+              }`}
             >
               {isLoading ? 'Sedang Login...' : isGoogleLoading ? 'Memproses...' : 'Log In'}
             </button>
 
-          {/* Divider */}
-          <div className="relative">
+          {/* Divider dengan animasi */}
+          <div 
+            className={`relative ${baseTransition} delay-700 ${
+              isFormVisible ? visibleStyle : initialStyle
+            }`}
+          >
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
             </div>
@@ -129,24 +212,38 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Google Sign-In Button */}
-          <div>
+          {/* Google Sign-In Button dengan animasi */}
+          <div 
+            className={`${baseTransition} delay-800 ${
+              isFormVisible ? visibleStyle : initialStyle
+            }`}
+          >
             <GoogleSignIn onLoading={setIsGoogleLoading} />
           </div>
 
-            <div className="text-sm text-center text-gray-600">
+            <div 
+              className={`text-sm text-center text-gray-600 ${baseTransition} delay-900 ${
+                isFormVisible ? visibleStyle : initialStyle
+              }`}
+            >
               Belum punya akun?{' '}
               <Link
                 to="/register"
-                className="font-semibold text-blue-600 hover:underline"
+                className="font-semibold text-blue-600 hover:underline transition-colors duration-200"
               >
                 Daftar di sini
               </Link>
             </div>
           </form>
         </div>
-         {/* Gambar */}
-        <div className="relative hidden w-full md:w-1/2 md:block">
+        
+         {/* Gambar dengan animasi */}
+        <div 
+          ref={imageRef}
+          className={`relative hidden w-full md:w-1/2 md:block ${baseTransition} delay-400 ${
+            isImageVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+          }`}
+        >
           <img
             src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
             alt="Pemandangan wisata"

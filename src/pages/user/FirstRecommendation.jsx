@@ -6,6 +6,7 @@ import {
 } from '../../api/recommendations';
 import {submitInitialRatings} from '../../api/ratings';
 import { Star, MapPin, CheckCircle, Sparkles, Heart, ArrowRight } from 'lucide-react';
+import useIntersectionObserver from '../../Hook/useIntersectionObserver';
 
 export default function FirstRecommendation() {
   const navigate = useNavigate();
@@ -18,6 +19,32 @@ export default function FirstRecommendation() {
   const [success, setSuccess] = useState(false);
   const [hoveredPlace, setHoveredPlace] = useState(null);
   const [submitLoading, setSubmitLoading] = useState(false);
+
+  // Intersection Observer hooks untuk animasi
+  const [headerRef, isHeaderVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
+  const [progressRef, isProgressVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
+  const [placesRef, isPlacesVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
+  const [submitRef, isSubmitVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
+  // Animation classes
+  const baseTransition = 'transition-all duration-700 ease-out';
+  const initialStyle = 'opacity-0 translate-y-10';
+  const visibleStyle = 'opacity-100 translate-y-0';
 
   useEffect(() => {
     async function checkRecommendations() {
@@ -118,7 +145,6 @@ export default function FirstRecommendation() {
     );
   }
 
-
   if (success) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center">
@@ -174,33 +200,67 @@ export default function FirstRecommendation() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full mb-6">
+        {/* Header Section dengan animasi */}
+        <div 
+          ref={headerRef}
+          className={`text-center mb-12 ${baseTransition} ${
+            isHeaderVisible ? visibleStyle : initialStyle
+          }`}
+        >
+          <div 
+            className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full mb-6 ${baseTransition} delay-100 ${
+              isHeaderVisible ? visibleStyle : initialStyle
+            }`}
+          >
             <Heart className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
+          <h1 
+            className={`text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4 ${baseTransition} delay-200 ${
+              isHeaderVisible ? visibleStyle : initialStyle
+            }`}
+          >
             Ceritakan Preferensi Anda
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p 
+            className={`text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed ${baseTransition} delay-300 ${
+              isHeaderVisible ? visibleStyle : initialStyle
+            }`}
+          >
             Pilih dan beri rating 3-5 tempat yang menarik bagi Anda. Ini akan membantu kami menciptakan rekomendasi yang sempurna sesuai selera Anda.
           </p>
         </div>
 
-        {/* Progress Indicator */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
+        {/* Progress Indicator dengan animasi */}
+        <div 
+          ref={progressRef}
+          className={`mb-8 ${baseTransition} ${
+            isProgressVisible ? visibleStyle : initialStyle
+          }`}
+        >
+          <div 
+            className={`flex items-center justify-between mb-2 ${baseTransition} delay-100 ${
+              isProgressVisible ? visibleStyle : initialStyle
+            }`}
+          >
             <span className="text-sm font-medium text-gray-600">Progress Rating</span>
             <span className="text-sm font-medium text-indigo-600">{ratedCount}/3 minimum</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+          <div 
+            className={`w-full bg-gray-200 rounded-full h-3 overflow-hidden ${baseTransition} delay-200 ${
+              isProgressVisible ? visibleStyle : initialStyle
+            }`}
+          >
             <div 
               className="h-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
           {ratedCount >= 3 && (
-            <p className="text-sm text-green-600 font-medium mt-2 flex items-center">
+            <p 
+              className={`text-sm text-green-600 font-medium mt-2 flex items-center ${baseTransition} delay-300 ${
+                isProgressVisible ? visibleStyle : initialStyle
+              }`}
+            >
               <CheckCircle className="w-4 h-4 mr-1" />
               Siap untuk mendapatkan rekomendasi!
             </p>
@@ -222,13 +282,24 @@ export default function FirstRecommendation() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {places.map(place => (
+            {/* Places Grid dengan animasi */}
+            <div 
+              ref={placesRef}
+              className={`grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 ${baseTransition} ${
+                isPlacesVisible ? visibleStyle : initialStyle
+              }`}
+            >
+              {places.map((place, index) => (
                 <div 
                   key={place.id} 
                   className={`group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:border-indigo-200 transition-all duration-300 cursor-pointer ${
                     ratings[place.id] ? 'ring-2 ring-indigo-500 bg-gradient-to-br from-indigo-50 to-purple-50' : ''
+                  } ${baseTransition} ${
+                    isPlacesVisible ? visibleStyle : initialStyle
                   }`}
+                  style={{ 
+                    transitionDelay: isPlacesVisible ? `${index * 100}ms` : '0ms' 
+                  }}
                   onMouseEnter={() => setHoveredPlace(place.id)}
                   onMouseLeave={() => setHoveredPlace(null)}
                 >
@@ -315,7 +386,13 @@ export default function FirstRecommendation() {
               ))}
             </div>
 
-            <div className="text-center">
+            {/* Submit Button dengan animasi */}
+            <div 
+              ref={submitRef}
+              className={`text-center ${baseTransition} ${
+                isSubmitVisible ? visibleStyle : initialStyle
+              }`}
+            >
               <button
                 onClick={handleSubmit}
                 disabled={submitLoading || ratedCount < 3}
@@ -323,6 +400,8 @@ export default function FirstRecommendation() {
                   ratedCount >= 3 && !submitLoading
                     ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-xl hover:shadow-2xl hover:scale-105 transform'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                } ${baseTransition} delay-100 ${
+                  isSubmitVisible ? visibleStyle : initialStyle
                 }`}
               >
                 {submitLoading ? (
@@ -339,7 +418,11 @@ export default function FirstRecommendation() {
                 )}
               </button>
               
-              <p className="mt-4 text-sm text-gray-500 max-w-md mx-auto">
+              <p 
+                className={`mt-4 text-sm text-gray-500 max-w-md mx-auto ${baseTransition} delay-200 ${
+                  isSubmitVisible ? visibleStyle : initialStyle
+                }`}
+              >
                 Rating Anda akan membantu algoritma AI kami memberikan rekomendasi destinasi yang sesuai dengan preferensi dan minat Anda.
               </p>
             </div>
