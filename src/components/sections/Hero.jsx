@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 // Impor gambar dari src/assets (REKOMENDASI jika gambar di src)
-import heroImage from '../../assets/alamsumatera.jpg'; 
+import heroImage from '../../assets/hero.jpg';
 
 export default function Hero() {
   const handleScrollToTop = () => {
